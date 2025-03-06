@@ -1,10 +1,5 @@
-import { ReactNode } from "react";
-
-interface NavElements {
-  displayName: string;
-  linkTo: string;
-  logo: ReactNode;
-}
+// Interface import
+import { NavElements } from "@/lib";
 
 // Library import
 import { NavLink } from "react-router";
