@@ -6,6 +6,7 @@ import { NavElements } from "@/lib";
 import { RiHome2Line } from "react-icons/ri";
 import { FaUsersGear } from "react-icons/fa6";
 import { FaRoute } from "react-icons/fa";
+import { AiOutlineSchedule } from "react-icons/ai";
 
 import Sidebar from "@/components/Sidebar";
 
@@ -25,6 +26,11 @@ function Dashboard() {
       displayName: "Routes Management",
       linkTo: "/dashboard/routes",
       logo: <FaRoute />,
+    },
+    {
+      displayName: "Schedule Management",
+      linkTo: "/dashboard/schedules",
+      logo: <AiOutlineSchedule />,
     },
   ];
   return (
