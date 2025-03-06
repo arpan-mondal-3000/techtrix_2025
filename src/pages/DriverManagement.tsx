@@ -7,11 +7,12 @@ import {
   useReactTable,
   getCoreRowModel,
   flexRender,
+  getFilteredRowModel,
 } from "@tanstack/react-table";
+import { Link } from "react-router-dom";
 
 // Components import
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableHeader,
@@ -22,8 +23,7 @@ import {
 } from "@/components/ui/table";
 
 // Icons import
-import { IoSearch } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { FaExternalLinkAlt } from "react-icons/fa";
 
 interface Driver {
   name: string;
@@ -40,24 +40,35 @@ const columns: ColumnDef<Driver>[] = [
     header: "Name",
     accessorKey: "name",
   },
+  {
+    header: "Details",
+    accessorKey: "doc_id",
+    cell: ({ row }) => (
+      <Link to={row.getValue("doc_id")}>
+        <FaExternalLinkAlt />
+      </Link>
+    ),
+  },
 ];
 
 function DriverManagement() {
   const db = getFirestore(app);
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   const table = useReactTable({
     data: drivers,
     columns: columns,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
   });
   useEffect(() => {
     const fetchDrivers = async () => {
       try {
+        setLoading(true);
         const querySnapshot = await getDocs(collection(db, "drivers"));
         const driversData = querySnapshot.docs.map((doc) => ({
-          // id: doc.id,
           ...doc.data(),
         })) as Driver[];
         setDrivers(driversData);
@@ -70,6 +81,11 @@ function DriverManagement() {
     };
     fetchDrivers();
   }, []);
+
+  useEffect(() => {
+    table.getColumn("name")?.setFilterValue(search);
+  }, [search, table]);
+
   return (
     <>
       <div className="h-full p-6">
@@ -78,48 +94,56 @@ function DriverManagement() {
           <div className="flex w-full max-w-sm items-center space-x-2">
             <Input
               type="text"
-              placeholder="Search Drivers"
+              placeholder="Search Drivers by name..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               className="bg-white"
             />
-            <Button type="submit" className="hover:cursor-pointer">
-              <IoSearch />
-            </Button>
           </div>
         </div>
-        <div>
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows.map((row) => (
-                <Link to={`/dashboard`}>
-                  <TableRow key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
+        {loading ? (
+          "Loading..."
+        ) : (
+          <div>
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id}>
                         {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
+                          header.column.columnDef.header,
+                          header.getContext()
                         )}
-                      </TableCell>
+                      </TableHead>
                     ))}
                   </TableRow>
-                </Link>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows.length > 0 ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow key={row.id} className="hover:bg-gray-100">
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {typeof cell.column.columnDef.cell === "function"
+                            ? cell.column.columnDef.cell(cell.getContext())
+                            : cell.getValue()}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={columns.length} className="text-center">
+                      No results found
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        )}
       </div>
     </>
   );
