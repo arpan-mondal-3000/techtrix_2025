@@ -2,18 +2,14 @@
 import React from "react";
 
 interface NavbarProps {
-  // If used normally, these callback(s) are for Login/Sign Up buttons
-  onAuthClick?: () => void;
-  // Determines whether or not to show the Login/Sign Up buttons.
   showAuthButtons?: boolean;
-  // If on the Auth route, we'll show a single Home button instead.
   isAuthRoute?: boolean;
-  // Callback for the Home button when on the Auth route.
   onHomeClick?: () => void;
+  onAuthButtonClick?: (authType: "login" | "signup") => void; // ADD THIS PROP
 }
 
 const Navbar: React.FC<NavbarProps> = ({
-  onAuthClick,
+  onAuthButtonClick,
   showAuthButtons = true,
   isAuthRoute = false,
   onHomeClick,
@@ -116,7 +112,7 @@ const Navbar: React.FC<NavbarProps> = ({
               data-aos-duration="1200"
               data-aos-delay="800"
               className="mx-1 w-2/5 h-[5vh] rounded-md border-none outline-none text-xl font-bold text-white bg-red-600 transition ease-linear hover:scale-110 hover:bg-transparent hover:backdrop-brightness-50 hover:text-white hover:border-solid hover:border"
-              onClick={onAuthClick}
+              onClick={() => onAuthButtonClick?.("login")}
             >
               Login
             </button>
@@ -125,7 +121,7 @@ const Navbar: React.FC<NavbarProps> = ({
               data-aos-duration="1200"
               data-aos-delay="900"
               className="mx-1 w-2/5 h-[5vh] rounded-md border-none outline-none text-xl font-bold text-white bg-red-600 transition ease-linear hover:scale-110 hover:bg-transparent hover:backdrop-brightness-50 hover:text-white hover:border-solid hover:border"
-              onClick={onAuthClick}
+              onClick={() => onAuthButtonClick?.("signup")}
             >
               Sign up
             </button>

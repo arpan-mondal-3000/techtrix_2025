@@ -1,27 +1,31 @@
 // App.tsx (or Auth.tsx)
 import React, { useState } from "react";
 import "../css/auth.css";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import Navbar from "./Navbar";
 import background from "../assets/background.jpg";
 
 const Auth: React.FC = () => {
-  const [isRegisterActive, setIsRegisterActive] = useState(false);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
+  const location = useLocation(); 
+  const defaultAuthMode = location.state?.authMode === "signup"; 
+  const [isRegisterActive, setIsRegisterActive] = useState(defaultAuthMode);
 
-  const handleRegisterClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleRegisterClick = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
     e.preventDefault();
     setIsRegisterActive(true);
   };
 
-  const handleLoginClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleLoginClick = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
     e.preventDefault();
     setIsRegisterActive(false);
   };
 
-  // This function will be used for the Home button
   const handleHomeClick = () => {
-    // Navigate to your home route; adjust the path as needed
     navigate("/");
   };
 
@@ -30,16 +34,11 @@ const Auth: React.FC = () => {
       className="w-full h-screen bg-cover bg-center flex flex-col"
       style={{ backgroundImage: `url(${background})` }}
     >
-      {/* Navbar For Auth Route: show Home button */}
       <Navbar isAuthRoute={true} onHomeClick={handleHomeClick} />
-
-      {/* Auth Content Centered in the remaining space */}
       <div className="flex-grow flex items-center justify-center">
         <div className={`wrapper ${isRegisterActive ? "active" : ""}`}>
           <span className="bg-animate"></span>
           <span className="bg-animate2"></span>
-
-          {/* Login Form */}
           <div className="form-box login">
             <h2
               className="animation"
@@ -169,7 +168,8 @@ const Auth: React.FC = () => {
               className="animation"
               style={{ "--i": 18, "--j": 1 } as React.CSSProperties}
             >
-              Hope, You have a <br />Great Day
+              Hope, You have a <br />
+              Great Day
             </p>
           </div>
         </div>
