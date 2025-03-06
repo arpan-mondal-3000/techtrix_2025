@@ -1,17 +1,12 @@
-import { ReactNode } from "react";
-
-interface NavElements {
-  displayName: string;
-  linkTo: string;
-  logo: ReactNode;
-}
+// Interface import
+import { NavElements } from "@/lib";
 
 // Library import
 import { NavLink } from "react-router";
 
 const Sidebar: React.FC<{ navElements: NavElements[] }> = ({ navElements }) => {
   return (
-    <div className="w-64  bg-white shadow-lg rounded-r-xl flex flex-col dark:bg-slate-900">
+    <div className="w-64  bg-white shadow-lg rounded-r-xl flex flex-col dark:bg-slate-900 h-full py-4">
       <ul className="flex flex-col space-y-1">
         {navElements.map((navElement: any, idx: any) => (
           <NavLink to={navElement.linkTo} key={idx} end>
