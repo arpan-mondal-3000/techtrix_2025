@@ -5,6 +5,13 @@ import { app } from "@/firebase";
 import gsap from "gsap";
 import { motion } from "framer-motion";
 
+interface Route {
+  name: string;
+  startLocation: string;
+  endLocation: string;
+  busStops: string;
+}
+
 const EditRoute: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -88,7 +95,7 @@ const EditRoute: React.FC = () => {
         y: -50,
         duration: 0.5,
         ease: "power2.in",
-        onComplete: () => navigate("/routes") as any,
+        onComplete: () => navigate("/dashboard/routes") as any,
       });
     } catch (error) {
       console.error("Error updating route:", error);
@@ -121,7 +128,7 @@ const EditRoute: React.FC = () => {
               key={name}
               type="text"
               name={name}
-              value={route[name]}
+              value={route[name as keyof Route]}
               onChange={handleChange}
               placeholder={name.replace(/([A-Z])/g, " $1").trim()}
               className="w-full p-3 rounded-lg border border-gray-300 focus:ring-4 focus:ring-blue-300 focus:outline-none transition-transform transform focus:scale-105"

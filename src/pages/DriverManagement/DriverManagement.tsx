@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 
 // Components import
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableHeader,
@@ -24,9 +25,12 @@ import {
 
 // Icons import
 import { FaExternalLinkAlt } from "react-icons/fa";
+import { MdOutlineAdd } from "react-icons/md";
 
 interface Driver {
   name: string;
+  busName: string;
+  mob: string;
   id: string;
   doc_id: string;
 }
@@ -39,6 +43,14 @@ const columns: ColumnDef<Driver>[] = [
   {
     header: "Name",
     accessorKey: "name",
+  },
+  {
+    header: "Bus Name",
+    accessorKey: "busName",
+  },
+  {
+    header: "Mobile Number",
+    accessorKey: "mob",
   },
   {
     header: "Details",
@@ -69,7 +81,12 @@ function DriverManagement() {
         setLoading(true);
         const querySnapshot = await getDocs(collection(db, "drivers"));
         const driversData = querySnapshot.docs.map((doc) => ({
-          ...doc.data(),
+          name: doc.get("name"),
+          busName: doc.get("busName"),
+          mob: doc.get("mob"),
+          id: doc.get("id"),
+          doc_id: doc.id,
+          // ...doc.data(),
         })) as Driver[];
         setDrivers(driversData);
         console.log(driversData);
@@ -101,6 +118,11 @@ function DriverManagement() {
             />
           </div>
         </div>
+        <Link to={`/dashboard/driver-manager/new`} className="flex justify-end">
+          <Button className="hover:cursor-pointer">
+            {<MdOutlineAdd size={24} />}Add new Driver
+          </Button>
+        </Link>
         {loading ? (
           "Loading..."
         ) : (
