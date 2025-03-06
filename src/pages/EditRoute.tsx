@@ -1,12 +1,16 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 import { app } from "@/firebase";
+import gsap from "gsap";
+import { motion } from "framer-motion";
 
-const EditRoute = () => {
+const EditRoute: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const db = getFirestore(app);
+  const formRef = useRef<HTMLDivElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const [route, setRoute] = useState({
     name: "",
@@ -40,9 +44,28 @@ const EditRoute = () => {
         setLoading(false);
       }
     };
-
     fetchRoute();
   }, [id]);
+
+  useEffect(() => {
+    gsap.fromTo(
+      formRef.current,
+      { opacity: 0, y: 50, scale: 0.9 },
+      { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power4.out" }
+    );
+    gsap.fromTo(
+      "input, textarea",
+      { opacity: 0, x: -20 },
+      { opacity: 1, x: 0, stagger: 0.15, ease: "power3.out" }
+    );
+    gsap.to(buttonRef.current, {
+      y: -5,
+      repeat: -1,
+      duration: 1.5,
+      yoyo: true,
+      ease: "sine.inOut",
+    });
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -60,70 +83,81 @@ const EditRoute = () => {
         endLocation: route.endLocation,
         busStops: route.busStops.split(",").map((stop) => stop.trim()),
       });
-      navigate("/routes");
+      gsap.to(formRef.current, {
+        opacity: 0,
+        y: -50,
+        duration: 0.5,
+        ease: "power2.in",
+        onComplete: () => navigate("/routes") as any,
+      });
     } catch (error) {
       console.error("Error updating route:", error);
     }
   };
 
-  if (loading) return <p className="text-center mt-6">Loading...</p>;
+  if (loading)
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <p className="text-gray-700 text-lg animate-pulse">Loading...</p>
+      </div>
+    );
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-600 to-purple-500">
-      <div className="bg-white/20 backdrop-blur-md p-8 rounded-lg shadow-lg max-w-md w-full">
-        <h2 className="text-2xl font-bold text-white text-center mb-6">
+    <div className="min-h-screen flex items-center justify-center bg-white">
+      <motion.div
+        ref={formRef}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full transition-all duration-300"
+      >
+        <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
           ✏️ Edit Route
         </h2>
 
         <div className="space-y-4">
-          <input
-            type="text"
-            name="name"
-            value={route.name}
-            onChange={handleChange}
-            placeholder="Route Name"
-            className="w-full p-3 rounded-md border-2 border-white/30 bg-white/10 text-white placeholder-gray-300"
-          />
-          <input
-            type="text"
-            name="startLocation"
-            value={route.startLocation}
-            onChange={handleChange}
-            placeholder="Start Location"
-            className="w-full p-3 rounded-md border-2 border-white/30 bg-white/10 text-white placeholder-gray-300"
-          />
-          <input
-            type="text"
-            name="endLocation"
-            value={route.endLocation}
-            onChange={handleChange}
-            placeholder="End Location"
-            className="w-full p-3 rounded-md border-2 border-white/30 bg-white/10 text-white placeholder-gray-300"
-          />
-          <textarea
+          {["name", "startLocation", "endLocation"].map((name) => (
+            <motion.input
+              key={name}
+              type="text"
+              name={name}
+              value={route[name]}
+              onChange={handleChange}
+              placeholder={name.replace(/([A-Z])/g, " $1").trim()}
+              className="w-full p-3 rounded-lg border border-gray-300 focus:ring-4 focus:ring-blue-300 focus:outline-none transition-transform transform focus:scale-105"
+              whileFocus={{ scale: 1.05 }}
+            />
+          ))}
+          <motion.textarea
             name="busStops"
             value={route.busStops}
             onChange={handleChange}
             placeholder="Bus Stops (comma-separated)"
-            className="w-full p-3 rounded-md border-2 border-white/30 bg-white/10 text-white placeholder-gray-300"
+            className="w-full p-3 rounded-lg border border-gray-300 focus:ring-4 focus:ring-blue-300 focus:outline-none transition-transform transform focus:scale-105"
+            whileFocus={{ scale: 1.05 }}
           />
         </div>
 
         <div className="flex justify-between mt-6">
-          <button
+          <motion.button
             onClick={() => navigate("/dashboard/routes")}
-            className="px-4 py-2 bg-gray-300 text-gray-900 rounded-md shadow-md hover:bg-gray-400 transition"
+            className="px-4 py-2 bg-gray-400 text-white rounded-lg shadow-md hover:bg-gray-500"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
             ❌ Cancel
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            ref={buttonRef}
             onClick={handleSave}
-            className="px-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
             💾 Save Changes
-          </button>
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

@@ -1,7 +1,8 @@
 import { app } from "@/firebase";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useNavigate, useParams } from "react-router-dom";
+import gsap from "gsap";
 
 const EditSchedule = () => {
   const { id } = useParams();
@@ -13,6 +14,7 @@ const EditSchedule = () => {
   const [loading, setLoading] = useState(true);
   const db = getFirestore(app);
   const navigate = useNavigate();
+  const formRef = useRef(null);
 
   useEffect(() => {
     const fetchSchedule = async () => {
@@ -26,7 +28,6 @@ const EditSchedule = () => {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
-          console.log("Fetched data:", data); // Debugging log
           setBusName(data.busName || "");
           setDriverName(data.driverName || "");
           setStartTime(data.startTime || "");
@@ -45,6 +46,16 @@ const EditSchedule = () => {
     fetchSchedule();
   }, [id]);
 
+  useEffect(() => {
+    if (formRef.current) {
+      gsap.fromTo(
+        formRef.current,
+        { opacity: 0, y: 50, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power3.out" }
+      );
+    }
+  }, []);
+
   const handleUpdate = async () => {
     if (!id) {
       console.error("Invalid ID for update");
@@ -61,17 +72,26 @@ const EditSchedule = () => {
         route,
       });
 
-      console.log("Update successful!");
-      navigate("/dashboard/schedules");
+      gsap.to(formRef.current, {
+        opacity: 0,
+        y: -50,
+        scale: 0.9,
+        duration: 0.8,
+        ease: "power3.in",
+        onComplete: () => navigate("/dashboard/schedules") as any,
+      });
     } catch (error) {
       console.error("Error updating schedule:", error);
     }
   };
 
   return (
-    <div className="p-6 bg-gradient-to-r from-blue-500 to-purple-600 min-h-screen flex justify-center items-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-gray-700 mb-4 text-center">
+    <div className="p-6 bg-gradient-to-r from-gray-900 to-gray-700 min-h-screen flex justify-center items-center">
+      <div
+        ref={formRef}
+        className="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-md transform transition-all"
+      >
+        <h2 className="text-3xl font-extrabold text-gray-800 mb-6 text-center">
           ✏ Edit Schedule
         </h2>
         {loading ? (
@@ -79,31 +99,31 @@ const EditSchedule = () => {
         ) : (
           <>
             <input
-              className="w-full p-2 border rounded mb-2"
+              className="w-full p-3 border rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               value={busName}
               onChange={(e) => setBusName(e.target.value)}
               placeholder="Bus Name"
             />
             <input
-              className="w-full p-2 border rounded mb-2"
+              className="w-full p-3 border rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               value={driverName}
               onChange={(e) => setDriverName(e.target.value)}
               placeholder="Driver Name"
             />
             <input
-              className="w-full p-2 border rounded mb-2"
+              className="w-full p-3 border rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
               placeholder="Start Time"
             />
             <input
-              className="w-full p-2 border rounded mb-2"
+              className="w-full p-3 border rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
               placeholder="End Time"
             />
             <input
-              className="w-full p-2 border rounded mb-4"
+              className="w-full p-3 border rounded-lg mb-5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               value={route}
               onChange={(e) => setRoute(e.target.value)}
               placeholder="Route"
@@ -111,7 +131,7 @@ const EditSchedule = () => {
 
             <button
               onClick={handleUpdate}
-              className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+              className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 active:scale-95 shadow-lg"
             >
               Save Changes
             </button>

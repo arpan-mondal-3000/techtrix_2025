@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { app } from "@/firebase";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import gsap from "gsap";
 
 const daysOfWeek = [
   "Monday",
@@ -22,6 +24,15 @@ const AddSchedule = () => {
   const [days, setDays] = useState<string[]>([]);
   const db = getFirestore(app);
   const navigate = useNavigate();
+  const formRef = useRef(null);
+
+  useEffect(() => {
+    gsap.fromTo(
+      formRef.current,
+      { y: 50, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1, ease: "power2.out" }
+    );
+  }, []);
 
   const toggleDaySelection = (day: string) => {
     setDays((prevDays) =>
@@ -44,7 +55,6 @@ const AddSchedule = () => {
       alert("Please fill all fields and select at least one operating day.");
       return;
     }
-
     try {
       await addDoc(collection(db, "schedules"), {
         busName,
@@ -54,7 +64,7 @@ const AddSchedule = () => {
         endTime,
         days,
       });
-      navigate("/schedules");
+      navigate("/dashboard/schedules");
     } catch (error) {
       console.error("Error adding schedule:", error);
     }
@@ -62,50 +72,67 @@ const AddSchedule = () => {
 
   return (
     <div className="p-6 bg-gradient-to-br from-blue-50 to-gray-100 min-h-screen flex items-center justify-center">
-      <form
+      <motion.form
+        ref={formRef}
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg border-l-4 border-blue-500"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+        <motion.h2
+          className="text-3xl font-bold text-gray-800 mb-6 text-center"
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
           🚌 Add Bus Schedule
-        </h2>
+        </motion.h2>
 
         <div className="grid gap-4">
-          <input
-            className="input-field"
-            placeholder="Bus Name"
-            value={busName}
-            onChange={(e) => setBusName(e.target.value)}
-          />
-          <input
-            className="input-field"
-            placeholder="Driver Name"
-            value={driverName}
-            onChange={(e) => setDriverName(e.target.value)}
-          />
-          <input
-            className="input-field"
-            placeholder="Route (e.g., Dharmatala to Durgapur)"
-            value={route}
-            onChange={(e) => setRoute(e.target.value)}
-          />
-          <input
+          {[
+            { placeholder: "Bus Name", value: busName, setter: setBusName },
+            {
+              placeholder: "Driver Name",
+              value: driverName,
+              setter: setDriverName,
+            },
+            {
+              placeholder: "Route (e.g., Dharmatala to Durgapur)",
+              value: route,
+              setter: setRoute,
+            },
+          ].map((field, index) => (
+            <motion.input
+              key={index}
+              className="input-field"
+              placeholder={field.placeholder}
+              value={field.value}
+              onChange={(e) => field.setter(e.target.value)}
+              whileFocus={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 200 }}
+            />
+          ))}
+          <motion.input
             type="time"
             className="input-field"
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
+            whileFocus={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 200 }}
           />
-          <input
+          <motion.input
             type="time"
             className="input-field"
             value={endTime}
             onChange={(e) => setEndTime(e.target.value)}
+            whileFocus={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 200 }}
           />
 
-          {/* Days of Operation */}
           <div className="flex flex-wrap gap-2">
             {daysOfWeek.map((day) => (
-              <label
+              <motion.label
                 key={day}
                 className={`cursor-pointer px-3 py-1 rounded-full text-sm font-medium ${
                   days.includes(day)
@@ -113,20 +140,24 @@ const AddSchedule = () => {
                     : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                 }`}
                 onClick={() => toggleDaySelection(day)}
+                whileTap={{ scale: 0.9 }}
               >
                 {day}
-              </label>
+              </motion.label>
             ))}
           </div>
         </div>
 
-        <button
+        <motion.button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg mt-6 w-full hover:bg-blue-700 transition-all"
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg mt-6 w-full hover:bg-blue-700"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ type: "spring", stiffness: 300 }}
         >
           ➕ Add Schedule
-        </button>
-      </form>
+        </motion.button>
+      </motion.form>
     </div>
   );
 };

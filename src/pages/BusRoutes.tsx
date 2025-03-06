@@ -1,5 +1,5 @@
 import { app } from "@/firebase";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   getFirestore,
   collection,
@@ -8,8 +8,9 @@ import {
   doc,
 } from "firebase/firestore";
 import { Link } from "react-router";
-
 import { MdOutlineAdd } from "react-icons/md";
+import gsap from "gsap";
+import { motion } from "framer-motion";
 
 interface Route {
   id: string;
@@ -23,10 +24,21 @@ const BusRoutes = () => {
   const [routes, setRoutes] = useState<Route[]>([]);
   const [loading, setLoading] = useState(true);
   const db = getFirestore(app);
+  const containerRef = useRef(null);
 
   useEffect(() => {
     fetchRoutes();
   }, []);
+
+  useEffect(() => {
+    if (routes.length > 0) {
+      gsap.fromTo(
+        ".route-card",
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 1, stagger: 0.2, ease: "power3.out" }
+      );
+    }
+  }, [routes]);
 
   const fetchRoutes = async () => {
     try {
@@ -43,7 +55,6 @@ const BusRoutes = () => {
     }
   };
 
-  // 🗑️ Delete Route Function
   const deleteRoute = async (routeId: string) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this route?"
@@ -54,7 +65,7 @@ const BusRoutes = () => {
       await deleteDoc(doc(db, "routes", routeId));
       setRoutes((prevRoutes) =>
         prevRoutes.filter((route) => route.id !== routeId)
-      ); // Update UI
+      );
       alert("Route deleted successfully!");
     } catch (error) {
       console.error("Error deleting route:", error);
@@ -64,58 +75,67 @@ const BusRoutes = () => {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">🚍 Bus Routes</h2>
-        <div className="flex justify-end">
+      <div className="max-w-5xl mx-auto" ref={containerRef}>
+        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+          🚍 Bus Routes
+        </h2>
+        <div className="flex justify-end mb-6">
           <Link
             to="/dashboard/routes/new"
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-all"
+            className="bg-gradient-to-r from-blue-400 to-purple-500 text-white px-5 py-3 rounded-xl shadow-md hover:scale-105 transition-all"
           >
             <div className="flex gap-2 items-center">
               <MdOutlineAdd size={24} /> Add New Route
             </div>
           </Link>
         </div>
+
         {loading ? (
-          <p className="text-center text-gray-600 mt-4">Loading...</p>
+          <p className="text-center text-gray-500 mt-4">Loading...</p>
         ) : (
-          <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {routes.map((route) => (
-              <div
+              <motion.div
                 key={route.id}
-                className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all"
+                className="route-card p-5 rounded-xl shadow-md bg-white relative overflow-hidden border border-gray-300"
+                whileHover={{ scale: 1.05 }}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
               >
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                <h3 className="text-xl font-semibold text-gray-800 mb-3">
                   {route.name}
                 </h3>
                 <p className="text-gray-600">
-                  <strong>Route:</strong> {route.startLocation} →{" "}
-                  {route.endLocation}
+                  <strong className="text-gray-700">Route:</strong>{" "}
+                  {route.startLocation} → {route.endLocation}
                 </p>
                 <p className="text-gray-600 mt-1">
-                  <strong>Stops:</strong> {route.busStops.join(", ")}
+                  <strong className="text-gray-700">Stops:</strong>{" "}
+                  {route.busStops.join(", ")}
                 </p>
-                <div className="flex gap-3 mt-4">
+
+                <div className="flex gap-4 mt-5">
                   <Link
                     to={`/dashboard/routes/${route.id}`}
-                    className="text-blue-600 hover:underline"
+                    className="text-blue-600 hover:text-blue-500 transition-all"
                   >
                     🔍 View
                   </Link>
                   <Link
                     to={`/dashboard/routes/edit/${route.id}`}
-                    className="text-green-600 hover:underline"
+                    className="text-green-600 hover:text-green-500 transition-all"
                   >
                     ✏️ Edit
                   </Link>
                   <button
                     onClick={() => deleteRoute(route.id)}
-                    className="text-red-600 hover:underline"
+                    className="text-red-600 hover:text-red-500 transition-all"
                   >
                     🗑️ Delete
                   </button>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         )}
