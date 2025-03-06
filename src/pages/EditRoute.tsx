@@ -111,7 +111,7 @@ const EditRoute = () => {
 
         <div className="flex justify-between mt-6">
           <button
-            onClick={() => navigate("/routes")}
+            onClick={() => navigate("/dashboard/routes")}
             className="px-4 py-2 bg-gray-300 text-gray-900 rounded-md shadow-md hover:bg-gray-400 transition"
           >
             ❌ Cancel

@@ -77,13 +77,13 @@ const RouteDetails = () => {
       {/* Navigation Buttons */}
       <div className="mt-6 flex gap-4">
         <Link
-          to="/routes"
+          to="/dashboard/routes"
           className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
         >
           Back to Routes
         </Link>
         <Link
-          to={`/routes/edit/${route.id}`}
+          to={`/dashboard/routes/edit/${route.id}`}
           className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700"
         >
           Edit Route

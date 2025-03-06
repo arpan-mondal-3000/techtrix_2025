@@ -62,7 +62,7 @@ const EditSchedule = () => {
       });
 
       console.log("Update successful!");
-      navigate("/schedules");
+      navigate("/dashboard/schedules");
     } catch (error) {
       console.error("Error updating schedule:", error);
     }

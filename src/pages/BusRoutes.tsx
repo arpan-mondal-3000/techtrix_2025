@@ -9,6 +9,8 @@ import {
 } from "firebase/firestore";
 import { Link } from "react-router";
 
+import { MdOutlineAdd } from "react-icons/md";
+
 interface Route {
   id: string;
   name: string;
@@ -66,10 +68,12 @@ const BusRoutes = () => {
         <h2 className="text-2xl font-bold text-gray-800 mb-6">🚍 Bus Routes</h2>
         <div className="flex justify-end">
           <Link
-            to="/routes/new"
+            to="/dashboard/routes/new"
             className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-all"
           >
-            ➕ Add New Route
+            <div className="flex gap-2 items-center">
+              <MdOutlineAdd size={24} /> Add New Route
+            </div>
           </Link>
         </div>
         {loading ? (
@@ -93,13 +97,13 @@ const BusRoutes = () => {
                 </p>
                 <div className="flex gap-3 mt-4">
                   <Link
-                    to={`/routes/${route.id}`}
+                    to={`/dashboard/routes/${route.id}`}
                     className="text-blue-600 hover:underline"
                   >
                     🔍 View
                   </Link>
                   <Link
-                    to={`/routes/edit/${route.id}`}
+                    to={`/dashboard/routes/edit/${route.id}`}
                     className="text-green-600 hover:underline"
                   >
                     ✏️ Edit

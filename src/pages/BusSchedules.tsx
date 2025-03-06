@@ -65,7 +65,7 @@ const BusSchedules = () => {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-4xl font-bold text-white">🚌 Bus Schedules</h2>
           <button
-            onClick={() => navigate("/schedules/add-schedules")}
+            onClick={() => navigate("/dashboard/schedules/add-schedules")}
             className="bg-white text-blue-600 font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition-all"
           >
             ➕ Add Schedule
@@ -88,7 +88,9 @@ const BusSchedules = () => {
                 {/* Buttons (Edit, Delete, and View Details) */}
                 <div className="absolute top-3 right-3 flex gap-2">
                   <button
-                    onClick={() => navigate(`/schedules/edit/${schedule.id}`)}
+                    onClick={() =>
+                      navigate(`/dashboard/schedules/edit/${schedule.id}`)
+                    }
                     className="bg-blue-500 text-white px-2 py-1 text-sm rounded hover:bg-blue-700 transition-all"
                   >
                     ✏️ Edit
@@ -120,7 +122,9 @@ const BusSchedules = () => {
 
                 {/* View Details Button */}
                 <button
-                  onClick={() => navigate(`/schedules/${schedule.id}`)}
+                  onClick={() =>
+                    navigate(`/dashboard/schedules/${schedule.id}`)
+                  }
                   className="mt-3 bg-gray-800 text-white px-3 py-1 text-sm rounded hover:bg-gray-900 transition-all"
                 >
                   🔍 View Details
