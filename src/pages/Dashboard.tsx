@@ -36,11 +36,11 @@ function Dashboard() {
   return (
     <>
       <div className="flex bg-muted min-h-screen">
-        <div>
-          <Sidebar navElements={navElements} />
-        </div>
         <div className="w-full">
           <Outlet />
+        </div>
+        <div>
+          <Sidebar navElements={navElements} />
         </div>
       </div>
     </>

@@ -12,6 +12,7 @@
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.2",
     "@tailwindcss/vite": "^4.0.10",
+    "@tanstack/react-table": "^8.21.2",
     "@types/react-router-dom": "^5.3.3",
     "aos": "^2.3.4",
     "class-variance-authority": "^0.7.1",
