@@ -1,6 +1,12 @@
 import { app } from "@/firebase";
 import { useEffect, useState } from "react";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import { Link } from "react-router";
 
 interface Route {
@@ -17,23 +23,42 @@ const BusRoutes = () => {
   const db = getFirestore(app);
 
   useEffect(() => {
-    const fetchRoutes = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "routes"));
-        const routeData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as Route[];
-        setRoutes(routeData);
-      } catch (error) {
-        console.error("Error fetching routes:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchRoutes();
   }, []);
+
+  const fetchRoutes = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "routes"));
+      const routeData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Route[];
+      setRoutes(routeData);
+    } catch (error) {
+      console.error("Error fetching routes:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 🗑️ Delete Route Function
+  const deleteRoute = async (routeId: string) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this route?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await deleteDoc(doc(db, "routes", routeId));
+      setRoutes((prevRoutes) =>
+        prevRoutes.filter((route) => route.id !== routeId)
+      ); // Update UI
+      alert("Route deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting route:", error);
+      alert("Failed to delete route.");
+    }
+  };
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -79,6 +104,12 @@ const BusRoutes = () => {
                   >
                     ✏️ Edit
                   </Link>
+                  <button
+                    onClick={() => deleteRoute(route.id)}
+                    className="text-red-600 hover:underline"
+                  >
+                    🗑️ Delete
+                  </button>
                 </div>
               </div>
             ))}
