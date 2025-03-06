@@ -5,6 +5,7 @@ import { NavElements } from "@/lib";
 // Icons import
 import { RiHome2Line } from "react-icons/ri";
 import { FaUsersGear } from "react-icons/fa6";
+import { FaRoute } from "react-icons/fa";
 
 import Sidebar from "@/components/Sidebar";
 
@@ -19,6 +20,11 @@ function Dashboard() {
       displayName: "Driver Management",
       linkTo: "/dashboard/driver-manager",
       logo: <FaUsersGear />,
+    },
+    {
+      displayName: "Routes Management",
+      linkTo: "/dashboard/routes",
+      logo: <FaRoute />,
     },
   ];
   return (
