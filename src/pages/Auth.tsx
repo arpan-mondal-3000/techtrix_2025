@@ -1,28 +1,110 @@
 // App.tsx (or Auth.tsx)
 import React, { useState } from "react";
 import "../css/auth.css";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import Navbar from "./Navbar";
 import background from "../assets/background.jpg";
+import { app } from "../firebase";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 const Auth: React.FC = () => {
-  const [isRegisterActive, setIsRegisterActive] = useState(false);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
   const navigate = useNavigate();
+  const location = useLocation();
+  const defaultAuthMode = location.state?.authMode === "signup";
+  const [isRegisterActive, setIsRegisterActive] = useState(defaultAuthMode);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
-  const handleRegisterClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleRegisterClick = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
     e.preventDefault();
     setIsRegisterActive(true);
+    setError(null);
   };
 
-  const handleLoginClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleLoginClick = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
     e.preventDefault();
     setIsRegisterActive(false);
+    setError(null);
   };
 
-  // This function will be used for the Home button
   const handleHomeClick = () => {
-    // Navigate to your home route; adjust the path as needed
     navigate("/");
+  };
+
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    try {
+      if (isRegisterActive) {
+        // Admin Registration
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const user = userCredential.user;
+
+        // Update Firebase Profile
+        await updateProfile(user, { displayName: fullName });
+
+        // Store admin details in Firestore
+        await setDoc(doc(db, "admins", user.uid), {
+          fullName: fullName,
+          email: user.email,
+          createdAt: new Date().toISOString(),
+        });
+
+        alert("Admin Registration successful!");
+      } else {
+        // Login for both Admins & Drivers
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        const user = userCredential.user;
+
+        // Check if the user is an Admin
+        const adminRef = doc(db, "admins", user.uid);
+        const adminSnap = await getDoc(adminRef);
+
+        if (adminSnap.exists()) {
+          alert("Admin login successful!");
+          navigate("/admin-dashboard");
+          return;
+        }
+
+        // Check if the user is a Driver
+        const driverRef = doc(db, "drivers", user.uid);
+        const driverSnap = await getDoc(driverRef);
+
+        if (driverSnap.exists()) {
+          alert("Driver login successful!");
+          navigate("/driver-dashboard");
+          return;
+        }
+
+        // If user is not found in either collection
+        setError("Unauthorized access. Please contact the admin.");
+      }
+    } catch (err: any) {
+      setError(err.message);
+    }
   };
 
   return (
@@ -30,16 +112,11 @@ const Auth: React.FC = () => {
       className="w-full h-screen bg-cover bg-center flex flex-col"
       style={{ backgroundImage: `url(${background})` }}
     >
-      {/* Navbar For Auth Route: show Home button */}
       <Navbar isAuthRoute={true} onHomeClick={handleHomeClick} />
-
-      {/* Auth Content Centered in the remaining space */}
       <div className="flex-grow flex items-center justify-center">
         <div className={`wrapper ${isRegisterActive ? "active" : ""}`}>
           <span className="bg-animate"></span>
           <span className="bg-animate2"></span>
-
-          {/* Login Form */}
           <div className="form-box login">
             <h2
               className="animation"
@@ -47,23 +124,34 @@ const Auth: React.FC = () => {
             >
               Login
             </h2>
-            <form action="">
+            <form onSubmit={handleAuth}>
               <div
                 className="input-box animation"
                 style={{ "--i": 1, "--j": 22 } as React.CSSProperties}
               >
-                <input type="text" required />
-                <label>Username</label>
+                <input
+                  type="text"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <label>Email</label>
                 <i className="bx bxs-user"></i>
               </div>
               <div
                 className="input-box animation"
                 style={{ "--i": 2, "--j": 23 } as React.CSSProperties}
               >
-                <input type="password" required />
+                <input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
                 <label>Password</label>
                 <i className="bx bxs-lock-alt"></i>
               </div>
+              {error && <p className="error-message">{error}</p>}
               <button
                 type="submit"
                 className="btn animation"
@@ -76,7 +164,7 @@ const Auth: React.FC = () => {
                 style={{ "--i": 4, "--j": 25 } as React.CSSProperties}
               >
                 <p>
-                  Don't have an account?{" "}
+                  Want to register as an Admin?{" "}
                   <a
                     href="#"
                     className="register-link"
@@ -110,22 +198,32 @@ const Auth: React.FC = () => {
               className="animation"
               style={{ "--i": 17, "--j": 0 } as React.CSSProperties}
             >
-              Sign Up
+              Admin Sign Up
             </h2>
-            <form action="">
+            <form onSubmit={handleAuth}>
               <div
                 className="input-box animation"
                 style={{ "--i": 18, "--j": 1 } as React.CSSProperties}
               >
-                <input type="text" required />
-                <label>Username</label>
+                <input
+                  type="text"
+                  required
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+                <label>Full name</label>
                 <i className="bx bxs-user"></i>
               </div>
               <div
                 className="input-box animation"
                 style={{ "--i": 19, "--j": 2 } as React.CSSProperties}
               >
-                <input type="email" required />
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
                 <label>Email</label>
                 <i className="bx bxs-envelope"></i>
               </div>
@@ -133,10 +231,16 @@ const Auth: React.FC = () => {
                 className="input-box animation"
                 style={{ "--i": 20, "--j": 3 } as React.CSSProperties}
               >
-                <input type="password" required />
+                <input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
                 <label>Password</label>
                 <i className="bx bxs-lock-alt"></i>
               </div>
+              {error && <p className="error-message">{error}</p>}
               <button
                 type="submit"
                 className="btn animation"
@@ -169,7 +273,8 @@ const Auth: React.FC = () => {
               className="animation"
               style={{ "--i": 18, "--j": 1 } as React.CSSProperties}
             >
-              Hope, You have a <br />Great Day
+              Hope, You have a <br />
+              Great Day
             </p>
           </div>
         </div>

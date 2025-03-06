@@ -1,34 +1,30 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import { useNavigate } from "react-router";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import background from "../assets/background.jpg"; // Ensure this path is correct
+import background from "../assets/background.jpg"; 
 import Navbar from "./Navbar";
-
 
 AOS.init();
 
 function Home() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
+
+  const handleAuthButtonClick = (authType: "login" | "signup") => {
+    navigate("/auth", { state: { authMode: authType } }); 
+  };
 
   useEffect(() => {
-    AOS.init(); // Initialize Animate On Scroll (AOS)
+    AOS.init();
   }, []);
-
-  const handleAuthClick = () => {
-    // Navigate to the "/auth" route
-    navigate("/auth");
-  };
 
   return (
     <div
       className="w-full h-screen bg-cover bg-center"
       style={{ backgroundImage: `url(${background})` }}
     >
-      {/* Navbar at the top */}
-      <Navbar onAuthClick={handleAuthClick} />
+      <Navbar onAuthButtonClick={handleAuthButtonClick} />
 
-      {/* Main Content */}
       <section className="w-full h-[90vh] flex justify-center items-center">
         <div className="content w-2/5 text-center text-gray-200 ml-[-20px]">
           <h1
@@ -61,8 +57,8 @@ function Home() {
             data-aos-delay="1000"
             className="w-[60%] mx-[20%] my-5 text-[18px]"
           >
-            Optimizing Bus Driver Schedules for Enhanced Efficiency and Passenger
-            Safety Every Journey.
+            Optimizing Bus Driver Schedules for Enhanced Efficiency and
+            Passenger Safety Every Journey.
           </p>
           <button
             data-aos="zoom-in"

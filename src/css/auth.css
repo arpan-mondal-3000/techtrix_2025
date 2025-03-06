@@ -263,8 +263,8 @@
   border: 2px solid #0ef;
   transform: rotate(10deg) skewY(40deg);
   transform-origin: bottom right;
-  transition: 1.5s ease;
-  transition-delay: 1.6s;
+  transition: 1s ease;
+  transition-delay: 1s;
 }
 
 .wrapper.active .bg-animate {
@@ -282,10 +282,10 @@
   background-size: cover;
   border-top: 3px solid #0ef;
   transform-origin: bottom left;
-  transition: 1.5s ease;
+  transition: 1s ease;
 }
 
 .wrapper.active .bg-animate2 {
   transform: rotate(-11deg) skewY(-41deg);
-  transition-delay: 1.2s;
+  transition-delay: 1s;
 }
