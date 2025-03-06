@@ -9,6 +9,7 @@ import DriverManagement from "./pages/DriverManagement";
 import AddRoute from "./pages/AddRoute.tsx";
 import RouteDetails from "./pages/RouteDetails.tsx";
 import EditRoute from "./pages/EditRoute.tsx";
+import Auth from "./pages/Auth.tsx";
 
 RouteDetails;
 function App() {
@@ -16,6 +17,7 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/auth" element={<Auth />} />
         <Route path="dashboard/" element={<Dashboard />}>
           <Route path="" element={<DashboardHome />} />
           <Route path="driver-manager" element={<DriverManagement />} />
