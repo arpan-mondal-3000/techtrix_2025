@@ -32,7 +32,6 @@ interface Driver {
   busName: string;
   mob: string;
   id: string;
-  doc_id: string;
 }
 
 const columns: ColumnDef<Driver>[] = [
@@ -54,9 +53,9 @@ const columns: ColumnDef<Driver>[] = [
   },
   {
     header: "Details",
-    accessorKey: "doc_id",
+    // accessorKey: "id",
     cell: ({ row }) => (
-      <Link to={row.getValue("doc_id")}>
+      <Link to={row.getValue("id")}>
         <FaExternalLinkAlt />
       </Link>
     ),
@@ -85,7 +84,6 @@ function DriverManagement() {
           busName: doc.get("busName"),
           mob: doc.get("mob"),
           id: doc.get("id"),
-          doc_id: doc.id,
           // ...doc.data(),
         })) as Driver[];
         setDrivers(driversData);

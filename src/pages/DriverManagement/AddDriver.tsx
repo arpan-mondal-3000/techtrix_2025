@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { app } from "@/firebase";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -57,20 +57,37 @@ const AddDriver = () => {
       return;
     }
     try {
-      await addDoc(collection(db, "drivers"), {
-        id: driverId,
-        name: driverName,
-        email: driverEmail,
-        mob: driverMobileNumber,
-        busName,
-        route,
-        profilePicture,
-      });
-      navigate("/dashboard/driver-manager");
+      const docRef = doc(db, "drivers", driverId);
+      const docSnap = await getDoc(docRef);
+      if (!docSnap.exists()) {
+        await setDoc(doc(db, "drivers", driverId), {
+          id: driverId,
+          name: driverName,
+          email: driverEmail,
+          mob: driverMobileNumber,
+          busName,
+          route,
+          profilePicture,
+        });
+        console.log("User added successfully!");
+        navigate("/dashboard/driver-manager");
+      } else {
+        console.log("User already exists!");
+        alert("Driver with this id already exist!");
+      }
     } catch (error) {
-      console.error("Error adding schedule:", error);
+      console.error("Error adding driver:", error);
     }
   };
+
+  // if (!user)
+  //   return (
+  //     <>
+  //       <div className="text-red-500 text-3xl text-center p-5">
+  //         Please log in as admin to add drivers!
+  //       </div>
+  //     </>
+  //   );
 
   return (
     <div className="p-6 bg-gradient-to-br from-blue-50 to-gray-100 min-h-screen flex items-center justify-center">
