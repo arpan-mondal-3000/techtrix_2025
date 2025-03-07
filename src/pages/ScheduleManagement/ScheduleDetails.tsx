@@ -175,7 +175,7 @@ const ScheduleDetails = () => {
         rotationX: -10,
         duration: 0.5,
         ease: "power2.in",
-        onComplete: () => navigate(-1),
+        onComplete: () => navigate(-1) as any,
       });
     } else {
       navigate(-1);
@@ -228,7 +228,7 @@ const ScheduleDetails = () => {
               </p>
 
               <p
-                ref={(el) => (contentRefs.current[2] = el)}
+                ref={(el) => (contentRefs.current[2] = el) as any}
                 className="text-gray-700 flex items-center bg-green-50 p-3 rounded-lg"
               >
                 <span className="text-green-500 font-bold mr-2">
@@ -238,7 +238,7 @@ const ScheduleDetails = () => {
               </p>
 
               <p
-                ref={(el) => (contentRefs.current[3] = el)}
+                ref={(el) => (contentRefs.current[3] = el) as any}
                 className="text-gray-700 flex items-center bg-amber-50 p-3 rounded-lg"
               >
                 <span className="text-amber-500 font-bold mr-2">

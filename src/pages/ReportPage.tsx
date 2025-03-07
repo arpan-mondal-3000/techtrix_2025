@@ -151,7 +151,7 @@ const MaintenanceForm = () => {
   );
 };
 
-const FormsContainer = () => {
+const ReportPage = () => {
   return (
     <div className="flex flex-col md:flex-row gap-6 justify-center items-center p-6">
       <IncidentForm />
@@ -160,4 +160,4 @@ const FormsContainer = () => {
   );
 };
 
-export default FormsContainer;
+export default ReportPage;
