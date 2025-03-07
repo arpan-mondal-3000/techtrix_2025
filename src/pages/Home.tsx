@@ -1,17 +1,17 @@
-import  { useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import background from "../assets/background.jpg"; 
+import background from "../assets/background.jpg";
 import Navbar from "./Navbar";
 
 AOS.init();
 
 function Home() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleAuthButtonClick = (authType: "login" | "signup") => {
-    navigate("/auth", { state: { authMode: authType } }); 
+    navigate("/auth", { state: { authMode: authType } });
   };
 
   useEffect(() => {
@@ -65,6 +65,7 @@ function Home() {
             data-aos-duration="2000"
             data-aos-delay="1200"
             className="w-2/5 h-[7vh] rounded-lg bg-red-600 border-none outline-none text-white cursor-pointer text-xl font-bold transition ease-linear hover:scale-110 hover:bg-transparent hover:backdrop-brightness-50 hover:text-white hover:border-solid hover:border"
+            onClick={() => navigate("/dashboard/schedules")}
           >
             MANAGE SCHEDULE
           </button>

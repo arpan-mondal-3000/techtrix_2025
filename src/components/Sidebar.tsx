@@ -2,9 +2,22 @@ import { NavElements } from "@/lib";
 import { NavLink, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LogOut, AlertTriangle } from "lucide-react";
+import { getAuth, signOut } from "firebase/auth";
 
 const Sidebar: React.FC<{ navElements: NavElements[] }> = ({ navElements }) => {
   const navigate = useNavigate(); // React Router navigation hook
+  const auth = getAuth();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      console.log("Logged out successfully");
+      localStorage.removeItem("user");
+      navigate("/");
+    } catch (error: any) {
+      console.error("Error logging out:", error.message);
+    }
+  };
 
   return (
     <motion.div
@@ -50,6 +63,7 @@ const Sidebar: React.FC<{ navElements: NavElements[] }> = ({ navElements }) => {
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
+          onClick={handleLogout}
           className="px-6 py-3 flex items-center justify-center gap-2 bg-red-500 text-white font-semibold rounded-lg shadow-lg hover:bg-red-600 transition-all"
         >
           <LogOut size={18} />
