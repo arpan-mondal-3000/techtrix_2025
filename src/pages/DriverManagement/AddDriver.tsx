@@ -106,6 +106,7 @@ const AddDriver = () => {
             busName,
             route,
             profilePicture,
+            adminUid: JSON.parse(user as string).uid,
           });
           console.log("User added successfully!");
           navigate("/dashboard/driver-manager");
