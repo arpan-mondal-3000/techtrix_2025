@@ -62,12 +62,20 @@ const Auth: React.FC = () => {
         // Update Firebase Profile
         await updateProfile(user, { displayName: fullName });
 
+        const adminData = {
+          fullName: fullName,
+          email: user.email,
+          createdAt: new Date().toISOString(),
+        };
+
         // Store admin details in Firestore
         await setDoc(doc(db, "admins", user.uid), {
           fullName: fullName,
           email: user.email,
           createdAt: new Date().toISOString(),
         });
+
+        localStorage.setItem("user", JSON.stringify({ uid: user.uid, role: "admin", ...adminData }));
 
         alert("Admin Registration successful!");
         navigate("/dashboard");
@@ -85,6 +93,9 @@ const Auth: React.FC = () => {
         const adminSnap = await getDoc(adminRef);
 
         if (adminSnap.exists()) {
+          const adminData = adminSnap.data();
+          localStorage.setItem("user", JSON.stringify({ uid: user.uid, role: "admin", ...adminData }));
+          navigate("/dashboard");
           alert("Admin login successful!");
           navigate("/dashboard");
           return;
@@ -95,6 +106,9 @@ const Auth: React.FC = () => {
         const driverSnap = await getDoc(driverRef);
 
         if (driverSnap.exists()) {
+          const driverData = driverSnap.data();
+          localStorage.setItem("user", JSON.stringify({ uid: user.uid, role: "driver", ...driverData }));
+          navigate("/dashboard");
           alert("Driver login successful!");
           navigate("/dashboard");
           return;
