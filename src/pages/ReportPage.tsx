@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "@/firebase";
 
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 const FormWrapper = ({ children }: any) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -31,7 +33,7 @@ const FormWrapper = ({ children }: any) => {
   );
 };
 
-const IncidentForm = () => {
+const IncidentForm = ({ user }: any) => {
   const [incident, setIncident] = useState("");
   const buttonRef = useRef(null);
 
@@ -51,8 +53,14 @@ const IncidentForm = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    if (!user) {
+      alert("Please log in to submit the form.");
+      return;
+    }
+
     try {
       await addDoc(collection(db, "incidents"), {
+        driverId: user.uid, // Store driver ID
         incident,
         timestamp: new Date(),
       });
@@ -91,7 +99,7 @@ const IncidentForm = () => {
   );
 };
 
-const MaintenanceForm = () => {
+const MaintenanceForm = ({ user }: any) => {
   const [maintenance, setMaintenance] = useState("");
   const buttonRef = useRef(null);
 
@@ -109,10 +117,16 @@ const MaintenanceForm = () => {
     );
   }, []);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!user) {
+      alert("Please log in to submit the form.");
+      return;
+    }
+
     try {
       await addDoc(collection(db, "maintenance"), {
+        driverId: user.uid, // Store driver ID
         maintenance,
         timestamp: new Date(),
       });
@@ -152,10 +166,27 @@ const MaintenanceForm = () => {
 };
 
 const ReportPage = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
   return (
     <div className="flex flex-col md:flex-row gap-6 justify-center items-center p-6">
-      <IncidentForm />
-      <MaintenanceForm />
+      {user ? (
+        <>
+          <IncidentForm user={user} />
+          <MaintenanceForm user={user} />
+        </>
+      ) : (
+        <p className="text-xl font-semibold text-red-500">
+          Please login to fill the form.
+        </p>
+      )}
     </div>
   );
 };
