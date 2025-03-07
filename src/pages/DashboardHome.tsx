@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, getDocs, getFirestore, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  where,
+} from "firebase/firestore";
 import { app } from "../firebase";
 import { CgPerformance } from "react-icons/cg";
 import { FaUser } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const DashboardHome: React.FC = () => {
   const [role, setRole] = useState<string | null>(null);
@@ -40,13 +47,35 @@ const DashboardHome: React.FC = () => {
   };
 
   return (
-    <main className="p-6 bg-gray-100 min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('src/assets/background.jpg')"}}>
-      {role === "admin" ? (
-        // Admin Dashboard
+    <main
+      className="p-6 bg-gray-100 min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: "url('src/assets/background.jpg')" }}
+    >
+      {role === "driver" ? (
         <>
-          <h1 className="text-3xl font-bold mb-4">Welcome, {name}</h1>
-          <h2 className="text-xl font-semibold mb-4">Your Drivers</h2>
-          <div className="overflow-x-auto bg-white p-4 rounded-lg shadow-md">
+          <motion.h1
+            className="text-3xl font-bold mb-4"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            Welcome, {name}
+          </motion.h1>
+          <motion.h2
+            className="text-xl font-semibold mb-4"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            Your Drivers
+          </motion.h2>
+          <motion.div
+            className="overflow-x-auto bg-white p-4 rounded-lg shadow-md"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+          >
             <table className="w-full border-collapse">
               <thead>
                 <tr className="bg-gray-200">
@@ -58,11 +87,19 @@ const DashboardHome: React.FC = () => {
               <tbody>
                 {drivers.length > 0 ? (
                   drivers.map((driver) => (
-                    <tr key={driver.id} className="border-b">
+                    <motion.tr
+                      key={driver.id}
+                      className="border-b hover:bg-gray-100 transition-all"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.4 }}
+                    >
                       <td className="p-2">{driver.fullName}</td>
                       <td className="p-2">{driver.email}</td>
-                      <td className="p-2 text-green-600 font-semibold">Active</td>
-                    </tr>
+                      <td className="p-2 text-green-600 font-semibold">
+                        Active
+                      </td>
+                    </motion.tr>
                   ))
                 ) : (
                   <tr>
@@ -73,37 +110,70 @@ const DashboardHome: React.FC = () => {
                 )}
               </tbody>
             </table>
-          </div>
+          </motion.div>
         </>
       ) : (
-        // Driver Dashboard
         <>
-          <div className="flex flex-col items-center mb-6">
+          <motion.div
+            className="flex flex-col items-center mb-6"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+          >
             <FaUser size={80} className="rounded-full bg-gray-300 p-3" />
             <h2 className="text-2xl font-semibold mt-2">{name}</h2>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {/* Skill Card */}
-            <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
+            <motion.div
+              className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center cursor-pointer"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              whileHover={{
+                scale: 1.1,
+                boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.15)",
+              }}
+            >
               <h3 className="text-lg font-semibold mb-2">Skill</h3>
               <CgPerformance size={40} className="text-blue-500" />
               <p className="text-2xl font-bold mt-2">{performance.skill}%</p>
-            </div>
+            </motion.div>
 
             {/* Communication Card */}
-            <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
+            <motion.div
+              className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center cursor-pointer"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              whileHover={{
+                scale: 1.1,
+                boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.15)",
+              }}
+            >
               <h3 className="text-lg font-semibold mb-2">Communication</h3>
               <CgPerformance size={40} className="text-green-500" />
-              <p className="text-2xl font-bold mt-2">{performance.communication}%</p>
-            </div>
+              <p className="text-2xl font-bold mt-2">
+                {performance.communication}%
+              </p>
+            </motion.div>
 
             {/* Total Performance Card */}
-            <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
+            <motion.div
+              className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center cursor-pointer"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              whileHover={{
+                scale: 1.1,
+                boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.15)",
+              }}
+            >
               <h3 className="text-lg font-semibold mb-2">Total Performance</h3>
               <CgPerformance size={40} className="text-red-500" />
               <p className="text-2xl font-bold mt-2">{performance.total}%</p>
-            </div>
+            </motion.div>
           </div>
         </>
       )}
