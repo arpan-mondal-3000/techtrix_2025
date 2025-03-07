@@ -70,6 +70,7 @@ const Auth: React.FC = () => {
         });
 
         alert("Admin Registration successful!");
+        navigate("/dashboard");
       } else {
         // Login for both Admins & Drivers
         const userCredential = await signInWithEmailAndPassword(
@@ -85,7 +86,7 @@ const Auth: React.FC = () => {
 
         if (adminSnap.exists()) {
           alert("Admin login successful!");
-          navigate("/admin-dashboard");
+          navigate("/dashboard");
           return;
         }
 
@@ -95,7 +96,7 @@ const Auth: React.FC = () => {
 
         if (driverSnap.exists()) {
           alert("Driver login successful!");
-          navigate("/driver-dashboard");
+          navigate("/dashboard");
           return;
         }
 
