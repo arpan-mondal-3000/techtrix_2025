@@ -78,7 +78,7 @@ const Auth: React.FC = () => {
         localStorage.setItem("user", JSON.stringify({ uid: user.uid, role: "admin", ...adminData }));
 
         alert("Admin Registration successful!");
-        navigate("/admin-dashboard");
+        navigate("/dashboard");
       } else {
         // Login for both Admins & Drivers
         const userCredential = await signInWithEmailAndPassword(
@@ -97,6 +97,7 @@ const Auth: React.FC = () => {
           localStorage.setItem("user", JSON.stringify({ uid: user.uid, role: "admin", ...adminData }));
           navigate("/dashboard");
           alert("Admin login successful!");
+          navigate("/dashboard");
           return;
         }
 
@@ -109,6 +110,7 @@ const Auth: React.FC = () => {
           localStorage.setItem("user", JSON.stringify({ uid: user.uid, role: "driver", ...driverData }));
           navigate("/dashboard");
           alert("Driver login successful!");
+          navigate("/dashboard");
           return;
         }
 
