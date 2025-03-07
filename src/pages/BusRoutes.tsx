@@ -97,7 +97,7 @@ const BusRoutes = () => {
             {routes.map((route) => (
               <motion.div
                 key={route.id}
-                className="route-card p-5 rounded-xl shadow-md bg-white relative overflow-hidden border border-gray-300"
+                className="route-card p-5 rounded-xl shadow-md bg-white relative overflow-hidden border  border-l-4 border-l-blue-500"
                 whileHover={{ scale: 1.05 }}
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}

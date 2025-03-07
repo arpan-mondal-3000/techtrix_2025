@@ -13,6 +13,7 @@ import BusSchedules from "./pages/BusSchedules.tsx";
 import AddSchedule from "./pages/AddSchedule.tsx";
 import EditSchedule from "./pages/EditSchedule.tsx";
 import ScheduleDetails from "./pages/ScheduleDetails.tsx";
+import ReportPage from "./pages/ReportPage.tsx";
 
 RouteDetails;
 function App() {
@@ -34,6 +35,7 @@ function App() {
           <Route path="schedules/add-schedules" element={<AddSchedule />} />
           <Route path="schedules/edit/:id" element={<EditSchedule />} />
           <Route path="schedules/:id" element={<ScheduleDetails />} />
+          <Route path="report" element={<ReportPage />} />
         </Route>
       </Routes>
     </>
