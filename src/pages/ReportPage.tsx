@@ -117,7 +117,7 @@ const MaintenanceForm = ({ user }: any) => {
     );
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!user) {
       alert("Please log in to submit the form.");
@@ -170,7 +170,7 @@ const ReportPage = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+      setUser(currentUser as any);
     });
     return () => unsubscribe();
   }, []);

@@ -69,7 +69,7 @@ const ScheduleDetails = () => {
         gsap.set(titleRef.current, { opacity: 0, y: -20 });
       }
 
-      contentRefs.current.forEach((ref, index) => {
+      contentRefs.current.forEach((ref) => {
         if (ref) {
           gsap.set(ref, { opacity: 0, x: 20 });
         }

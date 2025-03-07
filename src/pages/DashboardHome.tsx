@@ -16,11 +16,11 @@ const DashboardHome: React.FC = () => {
   const [role, setRole] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [drivers, setDrivers] = useState<any[]>([]);
-  const [performance, setPerformance] = useState({
+  const performance = {
     skill: 80,
     communication: 75,
     total: 85,
-  });
+  };
 
   const navigate = useNavigate();
   const db = getFirestore(app);
