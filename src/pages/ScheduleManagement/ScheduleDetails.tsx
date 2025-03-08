@@ -5,6 +5,9 @@ import { getFirestore, doc, getDoc } from "firebase/firestore";
 import gsap from "gsap";
 import bgImage from "@/assets/background.jpg";
 
+import { QRCodeSVG } from "qrcode.react";
+import { jsPDF } from "jspdf";
+
 interface Schedule {
   id: string;
   busName: string;
@@ -21,11 +24,73 @@ const ScheduleDetails = () => {
   const navigate = useNavigate();
   const db = getFirestore(app);
 
+  //qr
+  const [showQr, setShowQr] = useState(false);
+  // const [qrContents, setQrcontents] = useState("");
+  const [pdfUrl, setPdfUrl] = useState("");
+
   // Refs for animations
   const cardRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const backButtonRef = useRef<HTMLButtonElement>(null);
   const contentRefs = useRef<(HTMLParagraphElement | null)[]>([]);
+
+  // QR generation
+  useEffect(() => {
+    // const now = new Date();
+    const startTime = new Date();
+    const endTime = new Date();
+    const start = schedule?.startTime;
+    const end = schedule?.endTime;
+    // Parse the input HH:mm format
+    if (schedule && start && end) {
+      // setQrcontents(`Bus: ${schedule.busName}
+      //               Route: ${schedule.route}
+      //               Driver: ${schedule.driverName}
+      //               Start: ${schedule.startTime}
+      //               End: ${schedule.endTime}
+      //               Price: ₹${150}
+      //   `);
+
+      const doc = new jsPDF();
+      doc.text(
+        `Bus: ${schedule.busName}
+          Route: ${schedule.route}
+          Driver: ${schedule.driverName}
+          Start: ${schedule.startTime}
+          End: ${schedule.endTime}
+          Price: ₹${150}
+        `,
+        20,
+        30
+      );
+
+      // Create a Blob URL for the PDF
+      const pdfBlob = doc.output("blob");
+      const pdfObjectUrl = URL.createObjectURL(pdfBlob);
+      setPdfUrl(pdfObjectUrl);
+
+      const [startHours, startMinutes] = start.split(":").map(Number);
+      const [endHours, endMinutes] = end.split(":").map(Number);
+
+      // Set times for comparison
+      startTime.setHours(startHours, startMinutes, 0, 0);
+      endTime.setHours(endHours, endMinutes, 0, 0);
+
+      // Get current time
+      const currentTime = new Date();
+
+      if (startTime <= endTime) {
+        if (currentTime >= startTime && currentTime <= endTime) {
+          setShowQr(true);
+        }
+      } else {
+        if (currentTime >= startTime || currentTime <= endTime) {
+          setShowQr(true);
+        }
+      }
+    }
+  }, [schedule]);
 
   useEffect(() => {
     const fetchSchedule = async () => {
@@ -211,12 +276,20 @@ const ScheduleDetails = () => {
           </div>
         ) : schedule ? (
           <>
-            <h2
-              ref={titleRef}
-              className="text-3xl font-bold text-gray-800 mb-6 pb-3 border-b border-gray-200"
-            >
-              {schedule.busName}
-            </h2>
+            <div className="flex justify-between items-end">
+              <h2
+                ref={titleRef}
+                className="text-3xl font-bold text-gray-800 mb-6 pb-3 border-b border-gray-200"
+              >
+                {schedule.busName}
+              </h2>
+              {showQr && (
+                <div className="text-center my-3">
+                  <QRCodeSVG value={pdfUrl} size={128} className="m-2" />
+                  <div>Scan to pay</div>
+                </div>
+              )}
+            </div>
 
             <div className="space-y-4">
               <p
