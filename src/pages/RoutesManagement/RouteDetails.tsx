@@ -4,13 +4,11 @@ import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { app } from "@/firebase";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-// import { MapContainer, TileLayer } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine";
 import bgImage from "@/assets/background.jpg";
 
-// Type Definitions
 interface Route {
   id: string;
   name: string;
@@ -23,6 +21,8 @@ const RouteDetails = () => {
   const { id } = useParams();
   const [route, setRoute] = useState<Route | null>(null);
   const [loading, setLoading] = useState(true);
+  const [distance, setDistance] = useState<string | null>(null);
+  const [duration, setDuration] = useState<string | null>(null);
   const db = getFirestore(app);
 
   useEffect(() => {
@@ -52,7 +52,6 @@ const RouteDetails = () => {
     }
   }, [route]);
 
-  // Function to convert address to coordinates using OpenStreetMap API
   const convertToCoordinates = async (
     startAddress: string,
     endAddress: string
@@ -81,26 +80,34 @@ const RouteDetails = () => {
     }
   };
 
-  // Function to display the route on the map
   const addRouting = (
     startCoords: { lat: number; lng: number },
     endCoords: { lat: number; lng: number }
   ) => {
-    const map = L.map("map").setView([startCoords.lat, startCoords.lng], 12); // Center map at start location
+    const map = L.map("map").setView([startCoords.lat, startCoords.lng], 12);
 
-    // Adding OpenStreetMap tile layer
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "&copy; OpenStreetMap contributors",
     }).addTo(map);
 
-    // Routing Machine
-    L.Routing.control({
+    const routingControl = L.Routing.control({
       waypoints: [
         L.latLng(startCoords.lat, startCoords.lng),
         L.latLng(endCoords.lat, endCoords.lng),
       ],
       routeWhileDragging: true,
     }).addTo(map);
+
+    routingControl.on("routesfound", function (e) {
+      const route = e.routes[0];
+      setDistance((route.summary.totalDistance / 1000).toFixed(2) + " km");
+
+      const totalSeconds = route.summary.totalTime;
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+      setDuration(`${hours > 0 ? `${hours} hrs ` : ""}${minutes} mins`);
+    });
   };
 
   if (loading)
@@ -143,6 +150,12 @@ const RouteDetails = () => {
       <p className="text-lg text-gray-700 mb-2">
         <strong>End:</strong> {route.endLocation}
       </p>
+      {distance && duration && (
+        <p className="text-lg text-gray-700 mb-2">
+          <strong>Distance:</strong> {distance} | <strong>Duration:</strong>{" "}
+          {duration}
+        </p>
+      )}
       <div className="mt-4">
         <h3 className="text-xl font-semibold text-gray-800">Bus Stops:</h3>
         <motion.ul
@@ -151,10 +164,7 @@ const RouteDetails = () => {
           animate="visible"
           variants={{
             hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: { staggerChildren: 0.2 },
-            },
+            visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
           }}
         >
           {route.busStops.map((stop, index) => (
@@ -172,10 +182,8 @@ const RouteDetails = () => {
         </motion.ul>
       </div>
 
-      {/* Leaflet Map with Route */}
       <div id="map" className="w-full h-64 rounded-lg mt-6"></div>
 
-      {/* Navigation Buttons */}
       <div className="mt-6 flex gap-4">
         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
           <Link
