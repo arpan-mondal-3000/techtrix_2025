@@ -202,14 +202,14 @@ const BusSchedules = () => {
         {/* Header Section */}
         <div ref={headerRef} className="flex justify-between items-center mb-8">
           <h2 ref={titleRef} className="text-4xl font-bold text-gray-800">
-            🚌 Bus Schedules
+            Bus Schedules
           </h2>
           <button
             ref={buttonRef}
             onClick={() => navigate("/dashboard/schedules/add-schedules")}
             className="bg-blue-600 text-white font-semibold px-5 py-2.5 rounded-lg shadow-lg hover:bg-blue-700 transition-all"
           >
-            ➕ Add Schedule
+            Add Schedule
           </button>
         </div>
 
@@ -246,19 +246,19 @@ const BusSchedules = () => {
                     }
                     className="bg-blue-500 text-white px-2 py-1 text-sm rounded hover:bg-blue-700 transition-all transform hover:scale-110"
                   >
-                    ✏️ Edit
+                    Edit
                   </button>
                   <button
                     onClick={() => deleteSchedule(schedule.id)}
                     className="bg-red-500 text-white px-2 py-1 text-sm rounded hover:bg-red-700 transition-all transform hover:scale-110"
                   >
-                    🗑 Delete
+                    Delete
                   </button>
                 </div>
 
                 {/* Schedule Details */}
                 <h3 className="text-xl font-bold text-gray-700 mb-3 mt-1">
-                  🚌 {schedule.busName}
+                  {schedule.busName}
                 </h3>
                 <div className="space-y-2">
                   <p className="text-gray-600 flex items-center">
@@ -286,7 +286,7 @@ const BusSchedules = () => {
                   }
                   className="mt-5 bg-gray-800 text-white px-4 py-2 text-sm rounded-lg hover:bg-gray-900 transition-all transform hover:-translate-y-1 hover:shadow-lg w-full"
                 >
-                  🔍 View Details
+                  View Details
                 </button>
               </div>
             ))}

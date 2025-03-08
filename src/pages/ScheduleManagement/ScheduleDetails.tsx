@@ -215,7 +215,7 @@ const ScheduleDetails = () => {
               ref={titleRef}
               className="text-3xl font-bold text-gray-800 mb-6 pb-3 border-b border-gray-200"
             >
-              🚌 {schedule.busName}
+              {schedule.busName}
             </h2>
 
             <div className="space-y-4">

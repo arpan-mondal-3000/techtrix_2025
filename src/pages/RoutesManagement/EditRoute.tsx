@@ -127,7 +127,7 @@ const EditRoute: React.FC = () => {
         className="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full transition-all duration-300"
       >
         <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
-          ✏️ Edit Route
+          Edit Route
         </h2>
 
         <div className="space-y-4">
@@ -160,7 +160,7 @@ const EditRoute: React.FC = () => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
-            ❌ Cancel
+            Cancel
           </motion.button>
           <motion.button
             ref={buttonRef}
@@ -169,7 +169,7 @@ const EditRoute: React.FC = () => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
-            💾 Save Changes
+            Save Changes
           </motion.button>
         </div>
       </motion.div>

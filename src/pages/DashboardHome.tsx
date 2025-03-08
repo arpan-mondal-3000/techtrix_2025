@@ -109,7 +109,7 @@ const DashboardHome: React.FC = () => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.4 }}
                       >
-                        <td className="p-2">{driver.fullName}</td>
+                        <td className="p-2">{driver.name}</td>
                         <td className="p-2">{driver.email}</td>
                         <td className="p-2 text-green-600 font-semibold">
                           Active

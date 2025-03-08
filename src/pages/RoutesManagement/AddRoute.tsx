@@ -53,7 +53,7 @@ const AddRoute = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-3xl font-bold text-gray-800 mb-6 text-center"
         >
-          🛣️ Add New Route
+          Add New Route
         </motion.h2>
 
         <div className="grid gap-4">

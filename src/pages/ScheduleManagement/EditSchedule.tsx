@@ -100,7 +100,7 @@ const EditSchedule = () => {
         className="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-md transform transition-all"
       >
         <h2 className="text-3xl font-extrabold text-gray-800 mb-6 text-center">
-          ✏ Edit Schedule
+          Edit Schedule
         </h2>
         {loading ? (
           <p className="text-center text-gray-700">Loading...</p>

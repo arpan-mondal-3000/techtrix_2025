@@ -85,7 +85,7 @@ const BusRoutes = () => {
     >
       <div className="max-w-5xl mx-auto" ref={containerRef}>
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-          🚍 Bus Routes
+          Bus Routes
         </h2>
         <div className="flex justify-end mb-6">
           <Link
@@ -128,19 +128,19 @@ const BusRoutes = () => {
                     to={`/dashboard/routes/${route.id}`}
                     className="text-blue-600 hover:text-blue-500 transition-all"
                   >
-                    🔍 View
+                    View
                   </Link>
                   <Link
                     to={`/dashboard/routes/edit/${route.id}`}
                     className="text-green-600 hover:text-green-500 transition-all"
                   >
-                    ✏️ Edit
+                    Edit
                   </Link>
                   <button
                     onClick={() => deleteRoute(route.id)}
                     className="text-red-600 hover:text-red-500 transition-all"
                   >
-                    🗑️ Delete
+                    Delete
                   </button>
                 </div>
               </motion.div>
