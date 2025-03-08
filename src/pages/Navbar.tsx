@@ -1,6 +1,6 @@
 // src/components/Navbar.tsx
 import React from "react";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 interface NavbarProps {
   showAuthButtons?: boolean;
   isAuthRoute?: boolean;
@@ -15,7 +15,7 @@ const Navbar: React.FC<NavbarProps> = ({
   onHomeClick,
 }) => {
   const user = localStorage.getItem("user");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return (
     <nav className="w-full h-[10vh] flex justify-around items-center text-white">
@@ -128,15 +128,9 @@ const Navbar: React.FC<NavbarProps> = ({
                 </button>
               </>
             ) : (
-              <button
-                data-aos="fade-up"
-                data-aos-duration="1200"
-                data-aos-delay="900"
-                className="mx-1 w-2/5 h-[5vh] rounded-md border-none outline-none text-xl font-bold text-white bg-red-600 transition ease-linear hover:scale-110 hover:bg-transparent hover:backdrop-brightness-50 hover:text-white hover:border-solid hover:border"
-                onClick={() => navigate("/dashboard")}
-              >
-                Dashboard
-              </button>
+              <div className="text-xl font-bold text-white">
+                Welcome, {JSON.parse(user).fullName}
+              </div>
             )}
           </div>
         )

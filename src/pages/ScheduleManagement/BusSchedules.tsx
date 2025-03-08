@@ -1,6 +1,5 @@
 import { app } from "@/firebase";
 import { useEffect, useState, useRef } from "react";
-import bgImage from "@/assets/background.jpg";
 import {
   getFirestore,
   collection,
@@ -190,14 +189,7 @@ const BusSchedules = () => {
   };
 
   return (
-    <div
-      className="p-6  min-h-screen"
-      style={{
-        backgroundImage: `url(${bgImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
+    <div className="p-6  min-h-screen">
       <div className="max-w-5xl mx-auto">
         {/* Header Section */}
         <div ref={headerRef} className="flex justify-between items-center mb-8">

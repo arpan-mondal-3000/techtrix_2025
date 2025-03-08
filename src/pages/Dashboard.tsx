@@ -2,6 +2,9 @@
 import { Outlet } from "react-router";
 import { NavElements } from "@/lib";
 
+// Image import
+import bgImage from "@/assets/background.jpg";
+
 // Icons import
 import { RiHome2Line } from "react-icons/ri";
 import { FaUsersGear } from "react-icons/fa6";
@@ -41,7 +44,14 @@ function Dashboard() {
   ];
   return (
     <>
-      <div className="flex  min-h-screen">
+      <div
+        className="flex  min-h-screen"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <div className="w-full">
           <Outlet />
         </div>

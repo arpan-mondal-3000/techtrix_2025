@@ -18,6 +18,8 @@ function Home() {
     AOS.init();
   }, []);
 
+  const user = localStorage.getItem("user");
+
   return (
     <div
       className="w-full h-screen bg-cover bg-center"
@@ -60,15 +62,17 @@ function Home() {
             Optimizing Bus Driver Schedules for Enhanced Efficiency and
             Passenger Safety Every Journey.
           </p>
-          <button
-            data-aos="zoom-in"
-            data-aos-duration="2000"
-            data-aos-delay="1200"
-            className="w-2/5 h-[7vh] rounded-lg bg-red-600 border-none outline-none text-white cursor-pointer text-xl font-bold transition ease-linear hover:scale-110 hover:bg-transparent hover:backdrop-brightness-50 hover:text-white hover:border-solid hover:border"
-            onClick={() => navigate("/dashboard/schedules")}
-          >
-            MANAGE SCHEDULE
-          </button>
+          {user && (
+            <button
+              data-aos="zoom-in"
+              data-aos-duration="2000"
+              data-aos-delay="1200"
+              className="w-2/5 h-[7vh] rounded-lg bg-red-600 border-none outline-none text-white cursor-pointer text-xl font-bold transition ease-linear hover:scale-110 hover:bg-transparent hover:backdrop-brightness-50 hover:text-white hover:border-solid hover:border"
+              onClick={() => navigate("/dashboard/")}
+            >
+              Go to Dashboard
+            </button>
+          )}
         </div>
       </section>
     </div>

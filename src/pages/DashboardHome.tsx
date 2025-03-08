@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import bgImage from "@/assets/background.jpg";
 import {
   collection,
   getDocs,
@@ -51,23 +50,10 @@ const DashboardHome: React.FC = () => {
   };
 
   return (
-    <main
-      className="p-6 min-h-screen bg-cover bg-center"
-      style={{
-        backgroundImage: `url(${bgImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
+    <main className="p-6 min-h-screen bg-cover bg-center">
       {role === "admin" ? (
         <>
-          <div
-            style={{
-              backgroundImage: "url('techtrix_2025/src/assets/background.jpg')",
-              backgroundSize: "cover",
-              height: "100vh",
-            }}
-          >
+          <div>
             <motion.h1
               className="text-3xl font-bold mb-4"
               initial={{ opacity: 0, y: -20 }}
@@ -85,15 +71,15 @@ const DashboardHome: React.FC = () => {
               Your Drivers
             </motion.h2>
             <motion.div
-              className="overflow-x-auto bg-white p-4 rounded-lg shadow-md"
+              className=""
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6 }}
               whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
             >
-              <table className="w-full border-collapse">
+              <table className="w-full overflow-x-auto p-4 rounded-lg shadow-md bg-white opacity-60">
                 <thead>
-                  <tr className="bg-gray-200">
+                  <tr>
                     <th className="p-2 text-left">Name</th>
                     <th className="p-2 text-left">Email</th>
                     <th className="p-2 text-left">Status</th>
@@ -104,7 +90,7 @@ const DashboardHome: React.FC = () => {
                     drivers.map((driver) => (
                       <motion.tr
                         key={driver.id}
-                        className="border-b hover:bg-gray-100 transition-all"
+                        className="border-t hover:bg-gray-100 transition-all"
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.4 }}

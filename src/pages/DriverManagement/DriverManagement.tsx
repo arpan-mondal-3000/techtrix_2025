@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { app } from "@/firebase";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
-import bgImage from "@/assets/background.jpg";
 import {
   ColumnDef,
   useReactTable,
@@ -70,6 +69,8 @@ function DriverManagement() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
+  const user = localStorage.getItem("user");
+
   const table = useReactTable({
     data: drivers,
     columns: columns,
@@ -106,14 +107,7 @@ function DriverManagement() {
 
   return (
     <>
-      <div
-        className="h-full p-6"
-        style={{
-          backgroundImage: `url(${bgImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
+      <div className="h-full p-6">
         <p className="text-3xl font-semibold text-center">Manage Bus Drivers</p>
         <div className="flex justify-center my-6">
           <div className="flex w-full max-w-sm items-center space-x-2">
@@ -126,21 +120,29 @@ function DriverManagement() {
             />
           </div>
         </div>
-        <Link to={`/dashboard/driver-manager/new`} className="flex justify-end">
-          <Button className="hover:cursor-pointer">
-            {<MdOutlineAdd size={24} />}Add new Driver
-          </Button>
-        </Link>
+        {user && JSON.parse(user).role === "admin" && (
+          <Link
+            to={`/dashboard/driver-manager/new`}
+            className="flex justify-end"
+          >
+            <Button className="hover:cursor-pointer my-4">
+              {<MdOutlineAdd size={24} />}Add new Driver
+            </Button>
+          </Link>
+        )}
         {loading ? (
           "Loading..."
         ) : (
           <div>
-            <Table>
+            <Table className="bg-white p-4 rounded-lg opacity-60">
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
-                      <TableHead key={header.id}>
+                      <TableHead
+                        key={header.id}
+                        className="text-black font-bold"
+                      >
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
