@@ -30,15 +30,16 @@ import { MdOutlineAdd } from "react-icons/md";
 
 interface Driver {
   name: string;
+  email: string;
   busName: string;
   mob: string;
-  id: string;
+  uid: string;
 }
 
 const columns: ColumnDef<Driver>[] = [
   {
-    header: "ID",
-    accessorKey: "id",
+    header: "Email",
+    accessorKey: "email",
   },
   {
     header: "Name",
@@ -54,9 +55,9 @@ const columns: ColumnDef<Driver>[] = [
   },
   {
     header: "Details",
-    // accessorKey: "id",
+    accessorKey: "uid",
     cell: ({ row }) => (
-      <Link to={row.getValue("id")}>
+      <Link to={row.getValue("uid")}>
         <FaExternalLinkAlt />
       </Link>
     ),
@@ -82,15 +83,16 @@ function DriverManagement() {
         const querySnapshot = await getDocs(collection(db, "drivers"));
         const driversData = querySnapshot.docs.map((doc) => ({
           name: doc.get("name"),
+          email: doc.get("email"),
           busName: doc.get("busName"),
           mob: doc.get("mob"),
-          id: doc.get("id"),
+          uid: doc.id,
           // ...doc.data(),
         })) as Driver[];
         setDrivers(driversData);
         console.log(driversData);
       } catch (error) {
-        console.error("Error fetching routes:", error);
+        console.error("Error fetching drivers:", error);
       } finally {
         setLoading(false);
       }

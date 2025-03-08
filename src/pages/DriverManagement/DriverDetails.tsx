@@ -54,15 +54,21 @@ const DriverDetails = () => {
 
   // Delete driver
   const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this driver?")) return;
-    try {
-      setLoading(true);
-      await deleteDoc(doc(db, "drivers", id as string));
-      navigate(`/dashboard/driver-manager`);
-    } catch (err) {
-      console.error("Cannot delete driver: ", err);
-    } finally {
-      setLoading(false);
+    const user = JSON.parse(localStorage.getItem("user") as string);
+    if (user.role !== "admin") {
+      if (!window.confirm("Are you sure you want to delete this driver?"))
+        return;
+      try {
+        setLoading(true);
+        await deleteDoc(doc(db, "drivers", id as string));
+        navigate(`/dashboard/driver-manager`);
+      } catch (err) {
+        console.error("Cannot delete driver: ", err);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      alert("Log in as admin to delete a driver!");
     }
   };
 

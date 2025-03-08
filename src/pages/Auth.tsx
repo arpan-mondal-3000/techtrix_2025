@@ -75,7 +75,10 @@ const Auth: React.FC = () => {
           createdAt: new Date().toISOString(),
         });
 
-        localStorage.setItem("user", JSON.stringify({ uid: user.uid, role: "admin", ...adminData }));
+        localStorage.setItem(
+          "user",
+          JSON.stringify({ uid: user.uid, role: "admin", ...adminData })
+        );
 
         alert("Admin Registration successful!");
         navigate("/dashboard");
@@ -94,7 +97,10 @@ const Auth: React.FC = () => {
 
         if (adminSnap.exists()) {
           const adminData = adminSnap.data();
-          localStorage.setItem("user", JSON.stringify({ uid: user.uid, role: "admin", ...adminData }));
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ uid: user.uid, role: "admin", ...adminData })
+          );
           navigate("/dashboard");
           alert("Admin login successful!");
           navigate("/dashboard");
@@ -107,8 +113,15 @@ const Auth: React.FC = () => {
 
         if (driverSnap.exists()) {
           const driverData = driverSnap.data();
-          localStorage.setItem("user", JSON.stringify({ uid: user.uid, role: "driver", ...driverData }));
-          navigate("/dashboard");
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              uid: user.uid,
+              role: "driver",
+              id: driverData.id,
+              ...driverData,
+            })
+          );
           alert("Driver login successful!");
           navigate("/dashboard");
           return;

@@ -21,6 +21,8 @@ const EditDriver: React.FC = () => {
   const formRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
+  const user = localStorage.getItem("user");
+
   const [driver, setDriver] = useState<DriverDetails>({
     name: "",
     busName: "",
@@ -136,6 +138,16 @@ const EditDriver: React.FC = () => {
         <p className="text-gray-700 text-lg animate-pulse">Loading...</p>
       </div>
     );
+
+  if (!user || JSON.parse(user).role !== "admin") {
+    return (
+      <>
+        <div className="text-red-500 text-3xl text-center p-5">
+          Please log in as admin to edit drivers!
+        </div>
+      </>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">

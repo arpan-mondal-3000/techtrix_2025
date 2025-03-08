@@ -42,7 +42,10 @@ const DashboardHome: React.FC = () => {
   }, []);
 
   const fetchDrivers = async (adminId: string) => {
-    const q = query(collection(db, "drivers"), where("adminId", "==", adminId));
+    const q = query(
+      collection(db, "drivers"),
+      where("adminUid", "==", adminId)
+    );
     const snapshot = await getDocs(q);
     setDrivers(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
   };
@@ -56,7 +59,7 @@ const DashboardHome: React.FC = () => {
         backgroundPosition: "center",
       }}
     >
-      {role === "driver" ? (
+      {role === "admin" ? (
         <>
           <div
             style={{

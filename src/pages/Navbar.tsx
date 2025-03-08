@@ -1,6 +1,6 @@
 // src/components/Navbar.tsx
 import React from "react";
-
+import { useNavigate } from "react-router";
 interface NavbarProps {
   showAuthButtons?: boolean;
   isAuthRoute?: boolean;
@@ -14,6 +14,9 @@ const Navbar: React.FC<NavbarProps> = ({
   isAuthRoute = false,
   onHomeClick,
 }) => {
+  const user = localStorage.getItem("user");
+  const navigate = useNavigate();
+
   return (
     <nav className="w-full h-[10vh] flex justify-around items-center text-white">
       <div className="logo ml-16">
@@ -24,11 +27,7 @@ const Navbar: React.FC<NavbarProps> = ({
       </div>
       <div className="flex-1 flex justify-center">
         <div className="links flex space-x-4 ml-14">
-          <div
-            className="link"
-            data-aos="fade-up"
-            data-aos-duration="1200"
-          >
+          <div className="link" data-aos="fade-up" data-aos-duration="1200">
             <a
               href="#"
               className="text-white no-underline text-xl hover:text-red-600"
@@ -107,24 +106,38 @@ const Navbar: React.FC<NavbarProps> = ({
         // Otherwise, if desired, show the Login and Sign Up buttons.
         showAuthButtons && (
           <div className="buttons w-64 flex justify-center items-center mr-16">
-            <button
-              data-aos="fade-up"
-              data-aos-duration="1200"
-              data-aos-delay="800"
-              className="mx-1 w-2/5 h-[5vh] rounded-md border-none outline-none text-xl font-bold text-white bg-red-600 transition ease-linear hover:scale-110 hover:bg-transparent hover:backdrop-brightness-50 hover:text-white hover:border-solid hover:border"
-              onClick={() => onAuthButtonClick?.("login")}
-            >
-              Login
-            </button>
-            <button
-              data-aos="fade-up"
-              data-aos-duration="1200"
-              data-aos-delay="900"
-              className="mx-1 w-2/5 h-[5vh] rounded-md border-none outline-none text-xl font-bold text-white bg-red-600 transition ease-linear hover:scale-110 hover:bg-transparent hover:backdrop-brightness-50 hover:text-white hover:border-solid hover:border"
-              onClick={() => onAuthButtonClick?.("signup")}
-            >
-              Sign up
-            </button>
+            {!user ? (
+              <>
+                <button
+                  data-aos="fade-up"
+                  data-aos-duration="1200"
+                  data-aos-delay="800"
+                  className="mx-1 w-2/5 h-[5vh] rounded-md border-none outline-none text-xl font-bold text-white bg-red-600 transition ease-linear hover:scale-110 hover:bg-transparent hover:backdrop-brightness-50 hover:text-white hover:border-solid hover:border"
+                  onClick={() => onAuthButtonClick?.("login")}
+                >
+                  Login
+                </button>
+                <button
+                  data-aos="fade-up"
+                  data-aos-duration="1200"
+                  data-aos-delay="900"
+                  className="mx-1 w-2/5 h-[5vh] rounded-md border-none outline-none text-xl font-bold text-white bg-red-600 transition ease-linear hover:scale-110 hover:bg-transparent hover:backdrop-brightness-50 hover:text-white hover:border-solid hover:border"
+                  onClick={() => onAuthButtonClick?.("signup")}
+                >
+                  Sign up
+                </button>
+              </>
+            ) : (
+              <button
+                data-aos="fade-up"
+                data-aos-duration="1200"
+                data-aos-delay="900"
+                className="mx-1 w-2/5 h-[5vh] rounded-md border-none outline-none text-xl font-bold text-white bg-red-600 transition ease-linear hover:scale-110 hover:bg-transparent hover:backdrop-brightness-50 hover:text-white hover:border-solid hover:border"
+                onClick={() => navigate("/dashboard")}
+              >
+                Dashboard
+              </button>
+            )}
           </div>
         )
       )}

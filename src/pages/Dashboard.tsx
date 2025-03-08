@@ -7,15 +7,21 @@ import { RiHome2Line } from "react-icons/ri";
 import { FaUsersGear } from "react-icons/fa6";
 import { FaRoute } from "react-icons/fa";
 import { AiOutlineSchedule } from "react-icons/ai";
+import { MdSpaceDashboard } from "react-icons/md";
 
 import Sidebar from "@/components/Sidebar";
 
 function Dashboard() {
   const navElements: NavElements[] = [
     {
+      displayName: "Home",
+      linkTo: "/",
+      logo: <RiHome2Line />,
+    },
+    {
       displayName: "Dashboard",
       linkTo: "/dashboard/",
-      logo: <RiHome2Line />,
+      logo: <MdSpaceDashboard />,
     },
     {
       displayName: "Driver Management",
