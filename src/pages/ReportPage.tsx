@@ -34,6 +34,8 @@ const FormWrapper = ({ children }: any) => {
 };
 
 const IncidentForm = ({ user }: any) => {
+  const localUser = localStorage.getItem("user");
+
   const [incident, setIncident] = useState("");
   const buttonRef = useRef(null);
 
@@ -53,7 +55,7 @@ const IncidentForm = ({ user }: any) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    if (!user) {
+    if (!user && !localUser) {
       alert("Please log in to submit the form.");
       return;
     }
@@ -62,6 +64,8 @@ const IncidentForm = ({ user }: any) => {
       await addDoc(collection(db, "incidents"), {
         driverId: user.uid, // Store driver ID
         incident,
+        name: JSON.parse(localUser as any).name,
+        adminUID: JSON.parse(localUser as any).adminUid,
         timestamp: new Date(),
       });
       setIncident("");
@@ -100,6 +104,8 @@ const IncidentForm = ({ user }: any) => {
 };
 
 const MaintenanceForm = ({ user }: any) => {
+  const localUser = localStorage.getItem("user");
+
   const [maintenance, setMaintenance] = useState("");
   const buttonRef = useRef(null);
 
@@ -119,7 +125,7 @@ const MaintenanceForm = ({ user }: any) => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    if (!user) {
+    if (!user && !localUser) {
       alert("Please log in to submit the form.");
       return;
     }
@@ -128,6 +134,8 @@ const MaintenanceForm = ({ user }: any) => {
       await addDoc(collection(db, "maintenance"), {
         driverId: user.uid, // Store driver ID
         maintenance,
+        name: JSON.parse(localUser as any).name,
+        adminUID: JSON.parse(localUser as any).adminUid,
         timestamp: new Date(),
       });
       setMaintenance("");
