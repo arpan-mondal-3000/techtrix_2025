@@ -4,8 +4,13 @@ import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { app } from "@/firebase";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+// import { MapContainer, TileLayer } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import "leaflet-routing-machine";
 import bgImage from "@/assets/background.jpg";
 
+// Type Definitions
 interface Route {
   id: string;
   name: string;
@@ -40,6 +45,63 @@ const RouteDetails = () => {
 
     fetchRoute();
   }, [id]);
+
+  useEffect(() => {
+    if (route?.startLocation && route?.endLocation) {
+      convertToCoordinates(route.startLocation, route.endLocation);
+    }
+  }, [route]);
+
+  // Function to convert address to coordinates using OpenStreetMap API
+  const convertToCoordinates = async (
+    startAddress: string,
+    endAddress: string
+  ) => {
+    try {
+      const fetchCoords = async (address: string) => {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+            address
+          )}`
+        );
+        const data = await response.json();
+        if (data.length > 0) {
+          return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+        } else {
+          throw new Error(`Could not find coordinates for ${address}`);
+        }
+      };
+
+      const startCoords = await fetchCoords(startAddress);
+      const endCoords = await fetchCoords(endAddress);
+
+      addRouting(startCoords, endCoords);
+    } catch (error) {
+      console.error("Geocoding error:", error);
+    }
+  };
+
+  // Function to display the route on the map
+  const addRouting = (
+    startCoords: { lat: number; lng: number },
+    endCoords: { lat: number; lng: number }
+  ) => {
+    const map = L.map("map").setView([startCoords.lat, startCoords.lng], 12); // Center map at start location
+
+    // Adding OpenStreetMap tile layer
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
+    }).addTo(map);
+
+    // Routing Machine
+    L.Routing.control({
+      waypoints: [
+        L.latLng(startCoords.lat, startCoords.lng),
+        L.latLng(endCoords.lat, endCoords.lng),
+      ],
+      routeWhileDragging: true,
+    }).addTo(map);
+  };
 
   if (loading)
     return (
@@ -110,15 +172,8 @@ const RouteDetails = () => {
         </motion.ul>
       </div>
 
-      {/* Google Map Embed */}
-      <div className="mt-6">
-        <iframe
-          title="route-map"
-          className="w-full h-64 rounded-lg"
-          src={`https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=${route.startLocation}`}
-          allowFullScreen
-        ></iframe>
-      </div>
+      {/* Leaflet Map with Route */}
+      <div id="map" className="w-full h-64 rounded-lg mt-6"></div>
 
       {/* Navigation Buttons */}
       <div className="mt-6 flex gap-4">
