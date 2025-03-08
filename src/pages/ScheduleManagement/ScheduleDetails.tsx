@@ -6,7 +6,7 @@ import gsap from "gsap";
 import bgImage from "@/assets/background.jpg";
 
 import { QRCodeSVG } from "qrcode.react";
-import { jsPDF } from "jspdf";
+// import { jsPDF } from "jspdf";
 
 interface Schedule {
   id: string;
@@ -26,8 +26,8 @@ const ScheduleDetails = () => {
 
   //qr
   const [showQr, setShowQr] = useState(false);
-  // const [qrContents, setQrcontents] = useState("");
-  const [pdfUrl, setPdfUrl] = useState("");
+  const [qrContents, setQrcontents] = useState("");
+  // const [pdfUrl, setPdfUrl] = useState("");
 
   // Refs for animations
   const cardRef = useRef<HTMLDivElement>(null);
@@ -44,31 +44,31 @@ const ScheduleDetails = () => {
     const end = schedule?.endTime;
     // Parse the input HH:mm format
     if (schedule && start && end) {
-      // setQrcontents(`Bus: ${schedule.busName}
-      //               Route: ${schedule.route}
-      //               Driver: ${schedule.driverName}
-      //               Start: ${schedule.startTime}
-      //               End: ${schedule.endTime}
-      //               Price: ₹${150}
-      //   `);
+      setQrcontents(`Bus: ${schedule.busName}
+                    Route: ${schedule.route}
+                    Driver: ${schedule.driverName}
+                    Start: ${schedule.startTime}
+                    End: ${schedule.endTime}
+                    Price: ₹${150}
+        `);
 
-      const doc = new jsPDF();
-      doc.text(
-        `Bus: ${schedule.busName}
-          Route: ${schedule.route}
-          Driver: ${schedule.driverName}
-          Start: ${schedule.startTime}
-          End: ${schedule.endTime}
-          Price: ₹${150}
-        `,
-        20,
-        30
-      );
+      // const doc = new jsPDF();
+      // doc.text(
+      //   `Bus: ${schedule.busName}
+      //     Route: ${schedule.route}
+      //     Driver: ${schedule.driverName}
+      //     Start: ${schedule.startTime}
+      //     End: ${schedule.endTime}
+      //     Price: ₹${150}
+      //   `,
+      //   20,
+      //   30
+      // );
 
-      // Create a Blob URL for the PDF
-      const pdfBlob = doc.output("blob");
-      const pdfObjectUrl = URL.createObjectURL(pdfBlob);
-      setPdfUrl(pdfObjectUrl);
+      // // Create a Blob URL for the PDF
+      // const pdfBlob = doc.output("blob");
+      // const pdfObjectUrl = URL.createObjectURL(pdfBlob);
+      // setPdfUrl(pdfObjectUrl);
 
       const [startHours, startMinutes] = start.split(":").map(Number);
       const [endHours, endMinutes] = end.split(":").map(Number);
@@ -285,7 +285,7 @@ const ScheduleDetails = () => {
               </h2>
               {showQr && (
                 <div className="text-center my-3">
-                  <QRCodeSVG value={pdfUrl} size={128} className="m-2" />
+                  <QRCodeSVG value={qrContents} size={128} className="m-2" />
                   <div>Scan to pay</div>
                 </div>
               )}
