@@ -150,7 +150,7 @@ const EditDriver: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="min-h-screen flex items-center justify-center">
       <motion.div
         ref={formRef}
         initial={{ opacity: 0, scale: 0.9 }}

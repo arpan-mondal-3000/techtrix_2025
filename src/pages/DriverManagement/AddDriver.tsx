@@ -151,7 +151,7 @@ const AddDriver = () => {
     );
 
   return (
-    <div className="p-6 bg-gradient-to-br from-blue-50 to-gray-100 min-h-screen flex items-center justify-center">
+    <div className="p-6 min-h-screen flex items-center justify-center">
       <motion.form
         ref={formRef}
         onSubmit={handleSubmit}

@@ -276,10 +276,10 @@ const ScheduleDetails = () => {
           </div>
         ) : schedule ? (
           <>
-            <div className="flex justify-between items-end">
+            <div className="flex justify-between items-center">
               <h2
                 ref={titleRef}
-                className="text-3xl font-bold text-gray-800 mb-6 pb-3 border-b border-gray-200"
+                className="text-3xl font-bold text-gray-800 mb-6 pb-3 border-gray-200"
               >
                 {schedule.busName}
               </h2>

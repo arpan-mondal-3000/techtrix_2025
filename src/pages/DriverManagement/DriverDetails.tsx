@@ -206,7 +206,7 @@ const DriverDetails = () => {
   };
 
   return (
-    <div className="p-6 bg-mute min-h-screen flex items-center justify-center">
+    <div className="p-6 min-h-screen flex items-center justify-center">
       <div
         ref={cardRef}
         className="bg-white/90 p-8 rounded-xl shadow-xl w-full max-w-lg backdrop-blur-sm border-l-8 border-blue-500 overflow-hidden"
