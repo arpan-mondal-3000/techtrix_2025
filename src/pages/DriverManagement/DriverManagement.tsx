@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { app } from "@/firebase";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import bgImage from "@/assets/background.jpg";
 import {
   ColumnDef,
   useReactTable,
@@ -103,7 +104,14 @@ function DriverManagement() {
 
   return (
     <>
-      <div className="h-full p-6">
+      <div
+        className="h-full p-6"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <p className="text-3xl font-semibold text-center">Manage Bus Drivers</p>
         <div className="flex justify-center my-6">
           <div className="flex w-full max-w-sm items-center space-x-2">

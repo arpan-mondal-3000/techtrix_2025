@@ -4,6 +4,7 @@ import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { app } from "@/firebase";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import bgImage from "@/assets/background.jpg";
 
 interface Route {
   id: string;
@@ -56,6 +57,11 @@ const RouteDetails = () => {
 
   return (
     <motion.div
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
       className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-8"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}

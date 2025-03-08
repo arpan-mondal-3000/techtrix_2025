@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import gsap from "gsap";
+import bgImage from "@/assets/background.jpg";
 
 interface Schedule {
   id: string;
@@ -183,7 +184,14 @@ const ScheduleDetails = () => {
   };
 
   return (
-    <div className="p-6 bg-mute min-h-screen flex items-center justify-center">
+    <div
+      className="p-6 bg-mute min-h-screen flex items-center justify-center"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <div
         ref={cardRef}
         className="bg-white/90 p-8 rounded-xl shadow-xl w-full max-w-lg backdrop-blur-sm border-l-8 border-blue-500 overflow-hidden"

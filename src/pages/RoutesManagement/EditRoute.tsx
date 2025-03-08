@@ -4,6 +4,7 @@ import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 import { app } from "@/firebase";
 import gsap from "gsap";
 import { motion } from "framer-motion";
+import bgImage from "@/assets/background.jpg";
 
 interface Route {
   name: string;
@@ -110,7 +111,14 @@ const EditRoute: React.FC = () => {
     );
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
+    <div
+      className="min-h-screen flex items-center justify-center"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <motion.div
         ref={formRef}
         initial={{ opacity: 0, scale: 0.9 }}

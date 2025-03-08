@@ -11,6 +11,7 @@ import { Link } from "react-router";
 import { MdOutlineAdd } from "react-icons/md";
 import gsap from "gsap";
 import { motion } from "framer-motion";
+import bgImage from "@/assets/background.jpg"; // Import background image
 
 interface Route {
   id: string;
@@ -74,7 +75,14 @@ const BusRoutes = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div
+      className="p-6 min-h-screen"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <div className="max-w-5xl mx-auto" ref={containerRef}>
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
           🚍 Bus Routes
@@ -97,7 +105,7 @@ const BusRoutes = () => {
             {routes.map((route) => (
               <motion.div
                 key={route.id}
-                className="route-card p-5 rounded-xl shadow-md bg-white relative overflow-hidden border  border-l-4 border-l-blue-500"
+                className="route-card p-5 rounded-xl shadow-md bg-white relative overflow-hidden border border-l-4 border-l-blue-500"
                 whileHover={{ scale: 1.05 }}
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}

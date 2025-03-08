@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import bgImage from "@/assets/background.jpg";
 import {
   collection,
   getDocs,
@@ -16,11 +17,11 @@ const DashboardHome: React.FC = () => {
   const [role, setRole] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [drivers, setDrivers] = useState<any[]>([]);
-  const [performance, setPerformance] = useState({
+  const performance = {
     skill: 80,
     communication: 75,
     total: 85,
-  });
+  };
 
   const navigate = useNavigate();
   const db = getFirestore(app);
@@ -48,69 +49,81 @@ const DashboardHome: React.FC = () => {
 
   return (
     <main
-      className="p-6 bg-gray-100 min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('src/assets/background.jpg')" }}
+      className="p-6 min-h-screen bg-cover bg-center"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
       {role === "driver" ? (
         <>
-          <motion.h1
-            className="text-3xl font-bold mb-4"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+          <div
+            style={{
+              backgroundImage: "url('techtrix_2025/src/assets/background.jpg')",
+              backgroundSize: "cover",
+              height: "100vh",
+            }}
           >
-            Welcome, {name}
-          </motion.h1>
-          <motion.h2
-            className="text-xl font-semibold mb-4"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            Your Drivers
-          </motion.h2>
-          <motion.div
-            className="overflow-x-auto bg-white p-4 rounded-lg shadow-md"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
-            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
-          >
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="p-2 text-left">Name</th>
-                  <th className="p-2 text-left">Email</th>
-                  <th className="p-2 text-left">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {drivers.length > 0 ? (
-                  drivers.map((driver) => (
-                    <motion.tr
-                      key={driver.id}
-                      className="border-b hover:bg-gray-100 transition-all"
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      <td className="p-2">{driver.fullName}</td>
-                      <td className="p-2">{driver.email}</td>
-                      <td className="p-2 text-green-600 font-semibold">
-                        Active
-                      </td>
-                    </motion.tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={3} className="p-4 text-center text-gray-500">
-                      No drivers assigned yet.
-                    </td>
+            <motion.h1
+              className="text-3xl font-bold mb-4"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              Welcome, {name}
+            </motion.h1>
+            <motion.h2
+              className="text-xl font-semibold mb-4"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              Your Drivers
+            </motion.h2>
+            <motion.div
+              className="overflow-x-auto bg-white p-4 rounded-lg shadow-md"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
+              whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+            >
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="bg-gray-200">
+                    <th className="p-2 text-left">Name</th>
+                    <th className="p-2 text-left">Email</th>
+                    <th className="p-2 text-left">Status</th>
                   </tr>
-                )}
-              </tbody>
-            </table>
-          </motion.div>
+                </thead>
+                <tbody>
+                  {drivers.length > 0 ? (
+                    drivers.map((driver) => (
+                      <motion.tr
+                        key={driver.id}
+                        className="border-b hover:bg-gray-100 transition-all"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.4 }}
+                      >
+                        <td className="p-2">{driver.fullName}</td>
+                        <td className="p-2">{driver.email}</td>
+                        <td className="p-2 text-green-600 font-semibold">
+                          Active
+                        </td>
+                      </motion.tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={3} className="p-4 text-center text-gray-500">
+                        No drivers assigned yet.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </motion.div>
+          </div>
         </>
       ) : (
         <>

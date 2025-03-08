@@ -3,6 +3,7 @@ import { app } from "@/firebase";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import bgImage from "@/assets/background.jpg";
 
 const AddRoute = () => {
   const [name, setName] = useState("");
@@ -29,6 +30,11 @@ const AddRoute = () => {
 
   return (
     <motion.div
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}

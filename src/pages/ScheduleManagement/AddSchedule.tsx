@@ -4,6 +4,7 @@ import { app } from "@/firebase";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import gsap from "gsap";
+import bgImage from "@/assets/background.jpg";
 
 const daysOfWeek = [
   "Monday",
@@ -71,7 +72,14 @@ const AddSchedule = () => {
   };
 
   return (
-    <div className="p-6 bg-gradient-to-br from-blue-50 to-gray-100 min-h-screen flex items-center justify-center">
+    <div
+      className="p-6 bg-gradient-to-br from-blue-50 to-gray-100 min-h-screen flex items-center justify-center"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <motion.form
         ref={formRef}
         onSubmit={handleSubmit}

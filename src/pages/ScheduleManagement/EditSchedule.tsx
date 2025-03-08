@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useNavigate, useParams } from "react-router-dom";
 import gsap from "gsap";
+import bgImage from "@/assets/background.jpg";
 
 const EditSchedule = () => {
   const { id } = useParams();
@@ -86,7 +87,14 @@ const EditSchedule = () => {
   };
 
   return (
-    <div className="p-6 bg-gradient-to-r from-gray-900 to-gray-700 min-h-screen flex justify-center items-center">
+    <div
+      className="p-6 bg-gradient-to-r from-gray-900 to-gray-700 min-h-screen flex justify-center items-center"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <div
         ref={formRef}
         className="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-md transform transition-all"

@@ -35,7 +35,7 @@ function Dashboard() {
   ];
   return (
     <>
-      <div className="flex bg-muted min-h-screen">
+      <div className="flex  min-h-screen">
         <div className="w-full">
           <Outlet />
         </div>
